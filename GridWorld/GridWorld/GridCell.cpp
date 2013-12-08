@@ -22,7 +22,7 @@ Coordinate GridCell::coordinate() {
 	return mCoordinate;
 }
 
-float GridCell::reward() {
+double GridCell::reward() {
 	return mReward;
 }
 

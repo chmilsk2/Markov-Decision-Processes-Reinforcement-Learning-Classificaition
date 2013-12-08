@@ -20,29 +20,49 @@
     if (self) {
 		[self setBackgroundColor:color];
 	
-		// add label
-		[self addSubview:self.textLabel];
+		// add reward label
+		[self addSubview:self.rewardLabel];
+		
+		// add utility label
+		[self addSubview:self.utilityLabel];
     }
 	
     return self;
 }
 
-- (UILabel *)textLabel {
-	if (!_textLabel) {
-		_textLabel = [[UILabel alloc] initWithFrame:CGRectZero];
-		[_textLabel setTextAlignment:NSTextAlignmentCenter];
+#pragma mark - Reward label
+
+- (UILabel *)rewardLabel {
+	if (!_rewardLabel) {
+		_rewardLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+		[_rewardLabel setTextAlignment:NSTextAlignmentCenter];
 	}
 	
-	return _textLabel;
+	return _rewardLabel;
+}
+
+#pragma mark - Utility label
+
+- (UILabel *)utilityLabel {
+	if (!_utilityLabel) {
+		_utilityLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+		[_utilityLabel setTextAlignment:NSTextAlignmentCenter];
+	}
+	
+	return _utilityLabel;
 }
 
 - (void)layoutSubviews {
-	// set reward label frame
 	CGFloat labelFontSize = floor(self.frame.size.height/6);
 	_labelFont = [UIFont fontWithName:GRID_CELL_FONT_NAME size:labelFontSize];
-	[_textLabel setFont:_labelFont];
 	
-	[_textLabel setFrame:CGRectMake(0, (self.frame.size.height - _labelFont.pointSize), self.frame.size.width, _labelFont.pointSize)];
+	// set reward label frame
+	[_rewardLabel setFont:_labelFont];
+	[_rewardLabel setFrame:CGRectMake(0, (self.frame.size.height - _labelFont.pointSize), self.frame.size.width, _labelFont.pointSize)];
+	
+	// set utility label frame
+	[_utilityLabel setFont:_labelFont];
+	[_utilityLabel setFrame:CGRectMake(0, (self.frame.size.height - _labelFont.pointSize)/2, self.frame.size.width, _labelFont.pointSize)];
 }
 
 @end

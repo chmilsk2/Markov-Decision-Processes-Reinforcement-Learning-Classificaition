@@ -95,7 +95,7 @@ using namespace std;
 			
 			else if ([type isEqualToString:start]) {
 				gridCellType = GridCellType::GridCellTypeStart;
-				newCoordinates = coordinates;
+				newCoordinates = coordinatesAndRewards;
 			}
 			
 			else if ([type isEqualToString:terminal]) {
@@ -110,7 +110,7 @@ using namespace std;
 				double reward = 0;
 				
 				for (id value in newCoordinate) {
-					float newValue = ((NSNumber *)value).floatValue;
+					double newValue = ((NSNumber *)value).doubleValue;
 					
 					if (index == 0) {
 						point.x = newValue;
@@ -161,6 +161,139 @@ using namespace std;
 
 - (void)solveButtonTouched {
 	NSLog(@"solve button touched");
+	[self valueIteration];
+}
+
+#pragma mark - Value iteration
+
+/** Determine the grid policy using value iteration
+ 
+ uPrime(s) = reward(s) + discountFactor * max(P(s'|s,a)*uPrime(s'))
+ 
+ @param intendedOutcomeProbability probability of heading in the intended direction: .8
+ @param unintendedOutcomeProbability probability of heading in the unintended direction, right angle to intended direction in this case: .1
+ @param discountFactor discount factor: .9
+ @param u vector for utility of state in s, initialized to 0
+ @param uPrime vector for utility of state s', initialized to 0
+ */
+
+- (void)valueIteration {
+	int numberOfRows = mGrid.numberOfRows();
+	int numberOfCols = mGrid.numberOfCols();
+	
+	int size = numberOfRows*numberOfCols;
+
+	double intededOutcomeProbability = .8;
+	double unintendedOutcomeProbability = .1;
+	
+	double discountFactor = .99;
+	
+	vector<double> u(size);
+	
+	// initialize u for terminal states, terminal states will always have the same utility values
+	for (int row = 0; row < numberOfRows; row++) {
+		for (int col = 0; col < numberOfCols; col++) {
+			GridCell sCell = mGrid.gridCellForRowAndCol(row, col);
+			
+			GridCellType sType = sCell.type();
+			
+			if (sType == GridCellType::GridCellTypeTerminal) {
+				int sOffset = row*numberOfCols + col;
+				
+				u[sOffset] = sCell.reward();
+			}
+		}
+	}
+	
+	for (int i = 0; i < 50; i++) {
+		for (int row = 0; row < numberOfRows; row++) {
+			for (int col = 0; col < numberOfCols; col++) {
+				// if a wall or terminal state, then skip
+				GridCell sCell = mGrid.gridCellForRowAndCol(row, col);
+				
+				GridCellType sType = sCell.type();
+				
+				if (sType != GridCellType::GridCellTypeWall && sType != GridCellType::GridCellTypeTerminal) {
+					// reward of current state s
+					double reward = mGrid.gridCellForRowAndCol(row, col).reward();
+					
+					int sOffset = row*numberOfCols + col;
+					
+					// compute utilities
+					double upUtility = [self utilityUsingU:u forToRow:row-1 toCol:col fromRow:row fromCol:col];
+					double downUtility = [self utilityUsingU:u forToRow:row+1 toCol:col fromRow:row fromCol:col];
+					double leftUtility = [self utilityUsingU:u forToRow:row toCol:col-1 fromRow:row fromCol:col];
+					double rightUtility = [self utilityUsingU:u forToRow:row toCol:col+1 fromRow:row fromCol:col];
+					
+					double maxValue = [self maxValueUsingU:u upUtility:upUtility downUtility:downUtility leftUtility:leftUtility rightUtility:rightUtility intendedOutcomeProbability:intededOutcomeProbability unintendedOutcomeProbability:unintendedOutcomeProbability];
+					
+					u[sOffset] = reward + discountFactor*maxValue;
+					
+					[_gridView setUtilityLabelText:[NSString stringWithFormat:@"%f", u[sOffset]] forGridCellAtRow:row col:col];
+				}
+			}
+		}
+	}
+}
+
+#pragma mark - Utilities
+
+- (double)utilityUsingU:(vector<double> &)u forToRow:(int)toRow toCol:(int)toCol fromRow:(int)fromRow fromCol:(int)fromCol {
+	// figure out the action that maximizes the utility to s'
+	int numberOfCols = mGrid.numberOfCols();
+	int sOffset = fromRow*numberOfCols + fromCol;
+	
+	GridCell sPrimeCell = mGrid.gridCellForRowAndCol(toRow, toCol);
+	int sPrimeOffset = toRow*numberOfCols + toCol;
+	
+	// compute utilities
+	double utility = u[sPrimeOffset];
+	
+	// if s' is a wall, then s' = s
+	if (sPrimeCell.type() == GridCellType::GridCellTypeWall) {
+		utility = u[sOffset];
+	}
+	
+	return utility;
+}
+
+#pragma mark - Max Value
+
+- (double)maxValueUsingU:(vector<double> &)u upUtility:(double)upUtility downUtility:(double)downUtility leftUtility:(double)leftUtility rightUtility:(double)rightUtility intendedOutcomeProbability:(double)intendedOutcomeProbability unintendedOutcomeProbability:(double)unintendedOutcomeProbability {
+	// maximize the utility
+	double maxValue = -DBL_MAX;
+	
+	// try going up
+	double upValue = intendedOutcomeProbability*upUtility + unintendedOutcomeProbability*leftUtility + unintendedOutcomeProbability*rightUtility;
+	
+	if (upValue > maxValue) {
+		maxValue = upValue;
+	}
+	
+	// try going down
+	double downValue = intendedOutcomeProbability*downUtility + unintendedOutcomeProbability*leftUtility
+	+ unintendedOutcomeProbability*rightUtility;
+	
+	if (downValue > maxValue) {
+		maxValue = downValue;
+	}
+	
+	// try going left
+	double leftValue = intendedOutcomeProbability*leftUtility + unintendedOutcomeProbability*upUtility + unintendedOutcomeProbability*rightUtility;
+	
+	if (leftValue > maxValue) {
+		maxValue = leftValue;
+	}
+	
+	// try going right
+	double rightValue = intendedOutcomeProbability*rightUtility + unintendedOutcomeProbability*upUtility
+	+ unintendedOutcomeProbability*downUtility;
+	
+	if (rightValue > maxValue) {
+		maxValue = rightValue;
+	}
+	
+	return maxValue;
 }
 
 #pragma mark - Grid view
@@ -216,7 +349,7 @@ using namespace std;
 	return gridCellViewType;
 }
 
-- (float)rewardForRow:(int)row col:(int)col {
+- (double)rewardForRow:(int)row col:(int)col {
 	GridCell cell = mGrid.gridCellForRowAndCol(row, col);
 	
 	return cell.reward();

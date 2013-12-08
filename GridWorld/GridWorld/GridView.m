@@ -49,7 +49,7 @@
 			
 			NSString *text;
 			
-			float reward = 0;
+			double reward = 0;
 			
 			if ([self.delegate respondsToSelector:@selector(rewardForRow:col:)]) {
 				reward = [self.delegate rewardForRow:(int)row col:(int)col];
@@ -89,7 +89,7 @@
 			
 			GridCellView *gridCellView = [[GridCellView alloc] initWithFrame:CGRectZero color:cellColor];
 			
-			[gridCellView.textLabel setText:text];
+			[gridCellView.rewardLabel setText:text];
 			
 			gridCellViews[row*numberOfCols + col] = gridCellView;
 			
@@ -98,6 +98,14 @@
 	}
 	
 	_gridCellViews = [gridCellViews copy];
+}
+
+#pragma mark - Set Utility Label for cell at row and col
+
+- (void)setUtilityLabelText:(NSString *)text forGridCellAtRow:(NSUInteger)row col:(NSUInteger)col {
+	GridCellView *gridCellView = [self gridCellViewForRow:row col:col];
+	
+	[gridCellView.utilityLabel setText:text];
 }
 
 #pragma mark - Grid cell view

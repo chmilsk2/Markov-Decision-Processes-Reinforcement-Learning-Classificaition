@@ -10,7 +10,8 @@
 
 @interface GridCellView : UIView
 
-@property (nonatomic, strong) UILabel *textLabel;
+@property (nonatomic, strong) UILabel *rewardLabel;
+@property (nonatomic, strong) UILabel *utilityLabel;
 
 - (id)initWithFrame:(CGRect)frame color:(UIColor *)color;
 

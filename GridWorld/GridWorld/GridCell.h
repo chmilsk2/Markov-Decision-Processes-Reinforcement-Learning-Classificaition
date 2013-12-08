@@ -21,14 +21,14 @@ enum class GridCellType {
 };
 
 typedef struct {
-	float x;
-	float y;
+	double x;
+	double y;
 } Coordinate;
 
 class GridCell {
 	GridCellType mType;
 	Coordinate mCoordinate;
-	float mReward;
+	double mReward;
 	
 	public:
 		GridCell();
@@ -42,7 +42,7 @@ class GridCell {
 		Coordinate coordinate();
 	
 		// reward
-		float reward();
+		double reward();
 	
 		// print
 		void print();
