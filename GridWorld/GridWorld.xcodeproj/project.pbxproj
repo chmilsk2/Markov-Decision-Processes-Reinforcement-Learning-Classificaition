@@ -25,6 +25,7 @@
 		05951C5F1853B7CE00A84329 /* GridCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 05951C5E1853B7CE00A84329 /* GridCellView.m */; };
 		05951C651853D14E00A84329 /* Grid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 05951C631853D14E00A84329 /* Grid.cpp */; };
 		05951C681853D1B200A84329 /* GridCell.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 05951C661853D1B200A84329 /* GridCell.cpp */; };
+		05951C7118551A1B00A84329 /* ValueIterationOperation.mm in Sources */ = {isa = PBXBuildFile; fileRef = 05951C7018551A1B00A84329 /* ValueIterationOperation.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -65,6 +66,8 @@
 		05951C641853D14E00A84329 /* Grid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Grid.h; sourceTree = "<group>"; };
 		05951C661853D1B200A84329 /* GridCell.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GridCell.cpp; sourceTree = "<group>"; };
 		05951C671853D1B200A84329 /* GridCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GridCell.h; sourceTree = "<group>"; };
+		05951C6F18551A1B00A84329 /* ValueIterationOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ValueIterationOperation.h; sourceTree = "<group>"; };
+		05951C7018551A1B00A84329 /* ValueIterationOperation.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ValueIterationOperation.mm; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -176,6 +179,8 @@
 		05951C4A18538C1700A84329 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				05951C6F18551A1B00A84329 /* ValueIterationOperation.h */,
+				05951C7018551A1B00A84329 /* ValueIterationOperation.mm */,
 				05951C641853D14E00A84329 /* Grid.h */,
 				05951C631853D14E00A84329 /* Grid.cpp */,
 				05951C671853D1B200A84329 /* GridCell.h */,
@@ -301,6 +306,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				05951C2918538BDC00A84329 /* AppDelegate.m in Sources */,
+				05951C7118551A1B00A84329 /* ValueIterationOperation.mm in Sources */,
 				05951C4F18538C5F00A84329 /* GridViewController.mm in Sources */,
 				05951C2518538BDC00A84329 /* main.m in Sources */,
 				05951C5C1853A8CB00A84329 /* GridView.m in Sources */,
@@ -511,6 +517,7 @@
 				05951C4318538BDC00A84329 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		05951C4418538BDC00A84329 /* Build configuration list for PBXNativeTarget "GridWorldTests" */ = {
 			isa = XCConfigurationList;
@@ -519,6 +526,7 @@
 				05951C4618538BDC00A84329 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

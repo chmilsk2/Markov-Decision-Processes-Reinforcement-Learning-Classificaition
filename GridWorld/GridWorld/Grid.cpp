@@ -29,6 +29,10 @@ GridCell & Grid::gridCellForRowAndCol(int row, int col) {
 	return mGridCells[row*mNumberOfCols + col];
 }
 
+void Grid::setUtilityForRowAndCol(int row, int col, double utility) {
+	gridCellForRowAndCol(row, col).setUtility(utility);
+}
+
 void Grid::sort() {
 	vector<GridCell> sortedGridCells(mNumberOfRows*mNumberOfCols);
 	
@@ -44,6 +48,14 @@ void Grid::sort() {
 	mGridCells = sortedGridCells;
 	
 	print();
+}
+
+void Grid::resetUtilities() {
+	for (int row = 0; row < numberOfRows(); row++) {
+		for (int col = 0 ; col < numberOfCols(); col++) {
+			gridCellForRowAndCol(row, col).resetUtility();
+		}
+	}
 }
 
 void Grid::print() {

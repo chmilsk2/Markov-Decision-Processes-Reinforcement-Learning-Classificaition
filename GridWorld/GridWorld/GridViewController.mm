@@ -7,20 +7,39 @@
 //
 
 #import "GridViewController.h"
+#import "ValueIterationOperation.h"
 #import "Grid.h"
 #import "GridCell.h"
 #import <vector>
 
 using namespace std;
 
+#define GRID_WORLD_DISCOUNT_FACTOR .70
+#define GRID_WORLD_INTENDED_OUTCOME_PROBABILITIY .80
+#define GRID_WORLD_UNINTENDED_OUTCOME_PROBABILITIY .10
 #define GRID_WORLD_NAV_ITEM_TITLE @"Grid World"
-#define GRID_WORLD_SOLVE_BUTTON_TITLE @"Solve"
+#define GRID_WORLD_STEP_BUTTON_TITLE @"Step"
+#define GRID_WORLD_RESET_BUTTON_TITLE @"Reset"
 #define GRID_WORLD_GRID_FILE_NAME @"Assignment4GridWorld1"
 
 @implementation GridViewController {
 	Grid mGrid;
 	GridView *_gridView;
-	UIBarButtonItem *_solveButton;
+	UIBarButtonItem *_stepButton;
+	UIBarButtonItem *_resetButton;
+	NSOperationQueue *_queue;
+}
+
+- (id)init
+{
+    self = [super init];
+	
+    if (self) {
+        _queue = [[NSOperationQueue alloc] init];
+		[_queue setMaxConcurrentOperationCount:1];
+    }
+	
+    return self;
 }
 
 - (void)viewDidLoad
@@ -31,13 +50,14 @@ using namespace std;
 	mGrid = [self parseGrid];
 	mGrid.sort();
 	[self showGrid];
+	[self showUtilities];
 }
 
 #pragma mark - Navigation setup
 
 - (void)setUpNav {
 	[self.navigationItem setTitle:GRID_WORLD_NAV_ITEM_TITLE];
-	[self.navigationItem setRightBarButtonItem:self.solveButton];
+	[self.navigationItem setRightBarButtonItems:@[self.stepButton, self.resetButton]];
 }
 
 #pragma mark - Show grid
@@ -47,6 +67,18 @@ using namespace std;
 	[self.gridView addCellViews];
 	
 	[self.gridView setNeedsLayout];
+}
+
+#pragma mark - Show utilities
+
+- (void)showUtilities {
+	for (int row = 0; row < mGrid.numberOfRows(); row++) {
+		for (int col = 0; col < mGrid.numberOfCols(); col++) {
+			GridCell cell = mGrid.gridCellForRowAndCol(row, col);
+			
+			[_gridView setUtilityLabelText:[NSString stringWithFormat:@"%f", cell.utility()] forGridCellAtRow:row col:col];
+		}
+	}
 }
 
 #pragma mark - Parse grid
@@ -147,153 +179,64 @@ using namespace std;
 	}
 }
 
-#pragma mark - Solve button 
+#pragma mark - Step button
 
-- (UIBarButtonItem *)solveButton {
-	if (!_solveButton) {
-		_solveButton = [[UIBarButtonItem alloc] initWithTitle:GRID_WORLD_SOLVE_BUTTON_TITLE style:UIBarButtonItemStylePlain target:self action:@selector(solveButtonTouched)];
+- (UIBarButtonItem *)stepButton {
+	if (!_stepButton) {
+		_stepButton = [[UIBarButtonItem alloc] initWithTitle:GRID_WORLD_STEP_BUTTON_TITLE style:UIBarButtonItemStylePlain target:self action:@selector(stepButtonTouched)];
 	}
 	
-	return _solveButton;
+	return _stepButton;
 }
 
-#pragma mark - Solve button touched
+#pragma mark - Step button touched
 
-- (void)solveButtonTouched {
-	NSLog(@"solve button touched");
+- (void)stepButtonTouched {
+	NSLog(@"step button touched");
+	
 	[self valueIteration];
+}
+
+#pragma mark - Reset button
+
+- (UIBarButtonItem *)resetButton {
+	if (!_resetButton) {
+		_resetButton = [[UIBarButtonItem alloc] initWithTitle:GRID_WORLD_RESET_BUTTON_TITLE style:UIBarButtonItemStylePlain target:self action:@selector(resetButtonTouched)];
+	}
+	
+	return _resetButton;
+}
+
+#pragma mark - Reset button touched
+
+- (void)resetButtonTouched {
+	NSLog(@"reset button touched");
+	
+	mGrid.resetUtilities();
+	
+	[self showUtilities];
 }
 
 #pragma mark - Value iteration
 
-/** Determine the grid policy using value iteration
- 
- uPrime(s) = reward(s) + discountFactor * max(P(s'|s,a)*uPrime(s'))
- 
- @param intendedOutcomeProbability probability of heading in the intended direction: .8
- @param unintendedOutcomeProbability probability of heading in the unintended direction, right angle to intended direction in this case: .1
- @param discountFactor discount factor: .9
- @param u vector for utility of state in s, initialized to 0
- @param uPrime vector for utility of state s', initialized to 0
- */
-
 - (void)valueIteration {
-	int numberOfRows = mGrid.numberOfRows();
-	int numberOfCols = mGrid.numberOfCols();
+	ValueIterationOperation *valueIterationOperation = [[ValueIterationOperation alloc] initWithGrid:mGrid discountFactor:GRID_WORLD_DISCOUNT_FACTOR intendedOutcomeProbabilitiy:GRID_WORLD_INTENDED_OUTCOME_PROBABILITIY unIntendedOutcomeProbabilitiy:GRID_WORLD_UNINTENDED_OUTCOME_PROBABILITIY];
 	
-	int size = numberOfRows*numberOfCols;
-
-	double intededOutcomeProbability = .8;
-	double unintendedOutcomeProbability = .1;
-	
-	double discountFactor = .99;
-	
-	vector<double> u(size);
-	
-	// initialize u for terminal states, terminal states will always have the same utility values
-	for (int row = 0; row < numberOfRows; row++) {
-		for (int col = 0; col < numberOfCols; col++) {
-			GridCell sCell = mGrid.gridCellForRowAndCol(row, col);
-			
-			GridCellType sType = sCell.type();
-			
-			if (sType == GridCellType::GridCellTypeTerminal) {
-				int sOffset = row*numberOfCols + col;
+	valueIterationOperation.valueIterationCompletionBlock = ^(NSArray *utilities, Grid grid){
+		for (NSUInteger row = 0; row < mGrid.numberOfRows(); row++) {
+			for (NSUInteger col = 0; col < mGrid.numberOfCols(); col++) {
+				NSUInteger offset = row*mGrid.numberOfCols() + col;
 				
-				u[sOffset] = sCell.reward();
+				NSNumber *utility = utilities[offset];
+				
+				[_gridView setUtilityLabelText:[NSString stringWithFormat:@"%f", utility.doubleValue] forGridCellAtRow:row col:col];
 			}
 		}
-	}
+		
+		mGrid = grid;
+	};
 	
-	for (int i = 0; i < 50; i++) {
-		for (int row = 0; row < numberOfRows; row++) {
-			for (int col = 0; col < numberOfCols; col++) {
-				// if a wall or terminal state, then skip
-				GridCell sCell = mGrid.gridCellForRowAndCol(row, col);
-				
-				GridCellType sType = sCell.type();
-				
-				if (sType != GridCellType::GridCellTypeWall && sType != GridCellType::GridCellTypeTerminal) {
-					// reward of current state s
-					double reward = mGrid.gridCellForRowAndCol(row, col).reward();
-					
-					int sOffset = row*numberOfCols + col;
-					
-					// compute utilities
-					double upUtility = [self utilityUsingU:u forToRow:row-1 toCol:col fromRow:row fromCol:col];
-					double downUtility = [self utilityUsingU:u forToRow:row+1 toCol:col fromRow:row fromCol:col];
-					double leftUtility = [self utilityUsingU:u forToRow:row toCol:col-1 fromRow:row fromCol:col];
-					double rightUtility = [self utilityUsingU:u forToRow:row toCol:col+1 fromRow:row fromCol:col];
-					
-					double maxValue = [self maxValueUsingU:u upUtility:upUtility downUtility:downUtility leftUtility:leftUtility rightUtility:rightUtility intendedOutcomeProbability:intededOutcomeProbability unintendedOutcomeProbability:unintendedOutcomeProbability];
-					
-					u[sOffset] = reward + discountFactor*maxValue;
-					
-					[_gridView setUtilityLabelText:[NSString stringWithFormat:@"%f", u[sOffset]] forGridCellAtRow:row col:col];
-				}
-			}
-		}
-	}
-}
-
-#pragma mark - Utilities
-
-- (double)utilityUsingU:(vector<double> &)u forToRow:(int)toRow toCol:(int)toCol fromRow:(int)fromRow fromCol:(int)fromCol {
-	// figure out the action that maximizes the utility to s'
-	int numberOfCols = mGrid.numberOfCols();
-	int sOffset = fromRow*numberOfCols + fromCol;
-	
-	GridCell sPrimeCell = mGrid.gridCellForRowAndCol(toRow, toCol);
-	int sPrimeOffset = toRow*numberOfCols + toCol;
-	
-	// compute utilities
-	double utility = u[sPrimeOffset];
-	
-	// if s' is a wall, then s' = s
-	if (sPrimeCell.type() == GridCellType::GridCellTypeWall) {
-		utility = u[sOffset];
-	}
-	
-	return utility;
-}
-
-#pragma mark - Max Value
-
-- (double)maxValueUsingU:(vector<double> &)u upUtility:(double)upUtility downUtility:(double)downUtility leftUtility:(double)leftUtility rightUtility:(double)rightUtility intendedOutcomeProbability:(double)intendedOutcomeProbability unintendedOutcomeProbability:(double)unintendedOutcomeProbability {
-	// maximize the utility
-	double maxValue = -DBL_MAX;
-	
-	// try going up
-	double upValue = intendedOutcomeProbability*upUtility + unintendedOutcomeProbability*leftUtility + unintendedOutcomeProbability*rightUtility;
-	
-	if (upValue > maxValue) {
-		maxValue = upValue;
-	}
-	
-	// try going down
-	double downValue = intendedOutcomeProbability*downUtility + unintendedOutcomeProbability*leftUtility
-	+ unintendedOutcomeProbability*rightUtility;
-	
-	if (downValue > maxValue) {
-		maxValue = downValue;
-	}
-	
-	// try going left
-	double leftValue = intendedOutcomeProbability*leftUtility + unintendedOutcomeProbability*upUtility + unintendedOutcomeProbability*rightUtility;
-	
-	if (leftValue > maxValue) {
-		maxValue = leftValue;
-	}
-	
-	// try going right
-	double rightValue = intendedOutcomeProbability*rightUtility + unintendedOutcomeProbability*upUtility
-	+ unintendedOutcomeProbability*downUtility;
-	
-	if (rightValue > maxValue) {
-		maxValue = rightValue;
-	}
-	
-	return maxValue;
+	[_queue addOperation:valueIterationOperation];
 }
 
 #pragma mark - Grid view

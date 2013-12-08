@@ -29,6 +29,7 @@ class GridCell {
 	GridCellType mType;
 	Coordinate mCoordinate;
 	double mReward;
+	double mUtility;
 	
 	public:
 		GridCell();
@@ -44,8 +45,18 @@ class GridCell {
 		// reward
 		double reward();
 	
+		// utility
+		double utility();
+	
+		void setUtility(double utility);
+	
+		void resetUtility();
+	
 		// print
 		void print();
+	
+	private:
+		double defaultUtilityForTypeWithReward(GridCellType type, double reward);
 };
 
 #endif /* defined(__GridWorld__GridCell__) */
