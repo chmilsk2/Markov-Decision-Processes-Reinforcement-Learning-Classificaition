@@ -19,7 +19,11 @@ using namespace std;
 #define GRID_WORLD_DISCOUNT_FACTOR .99
 #define GRID_WORLD_INTENDED_OUTCOME_PROBABILITIY .80
 #define GRID_WORLD_UNINTENDED_OUTCOME_PROBABILITIY .10
-#define GRID_WORLD_NAV_ITEM_TITLE @"Grid World"
+#define GRID_WORLD_VALUE_ITERATION_NAV_ITEM_TITLE @"Value Iteration"
+#define GRID_WORLD_REINFORCEMENT_LEARNING_NAV_ITEM_TITLE @"Reinforcement Learning"
+#define GRID_WORLD_MENU_BUTTON_TITLE @"Menu"
+#define GRID_WORLD_CONTINUE_BUTTON_TITLE @"Continue"
+#define GRID_WORLD_AGENT_BUTTON_TITLE @"Agent"
 #define GRID_WORLD_STEP_BUTTON_TITLE @"Step"
 #define GRID_WORLD_RESET_BUTTON_TITLE @"Reset"
 #define GRID_WORLD_GRID_FILE_NAME @"Assignment4GridWorld1"
@@ -27,7 +31,10 @@ using namespace std;
 @implementation GridViewController {
 	Grid mGrid;
 	GridView *_gridView;
+	UIBarButtonItem *_menuButton;
+	UIBarButtonItem *_agentButton;
 	UIBarButtonItem *_stepButton;
+	UIBarButtonItem *_continueButton;
 	UIBarButtonItem *_resetButton;
 	NSOperationQueue *_queue;
 }
@@ -59,8 +66,9 @@ using namespace std;
 #pragma mark - Navigation setup
 
 - (void)setUpNav {
-	[self.navigationItem setTitle:GRID_WORLD_NAV_ITEM_TITLE];
-	[self.navigationItem setRightBarButtonItems:@[self.stepButton, self.resetButton]];
+	[self.navigationItem setTitle:GRID_WORLD_VALUE_ITERATION_NAV_ITEM_TITLE];
+	[self.navigationItem setLeftBarButtonItem:self.menuButton];
+	[self.navigationItem setRightBarButtonItems:@[self.stepButton, self.continueButton, self.agentButton, self.resetButton]];
 }
 
 #pragma mark - Show grid
@@ -192,6 +200,64 @@ using namespace std;
 		
 		return Grid();
 	}
+}
+
+#pragma mark - Menu button
+
+- (UIBarButtonItem *)menuButton {
+	if (!_menuButton) {
+		_menuButton = [[UIBarButtonItem alloc] initWithTitle:GRID_WORLD_MENU_BUTTON_TITLE style:UIBarButtonItemStylePlain target:self action:@selector(menuButtonTouched)];
+	}
+	
+	return _menuButton;
+}
+
+#pragma mark - Menu button touched
+
+- (void)menuButtonTouched {
+	NSLog(@"menu button touched");
+	
+	MenuButtonViewController *menuButtonViewController = [[MenuButtonViewController alloc] init];
+	[menuButtonViewController setDelegate:self];
+	
+	UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:menuButtonViewController];
+	
+	[self presentViewController:navController animated:YES completion:nil];
+}
+
+#pragma mark - Continue button
+
+- (UIBarButtonItem *)continueButton {
+	if (!_continueButton) {
+		_continueButton = [[UIBarButtonItem alloc] initWithTitle:GRID_WORLD_CONTINUE_BUTTON_TITLE
+														   style:UIBarButtonItemStylePlain
+														  target:self
+														  action:@selector(continueButtonTouched)];
+	}
+	
+	return _continueButton;
+}
+
+#pragma mark - Continue button touched
+
+- (void)continueButtonTouched {
+	NSLog(@"continue button touched");
+}
+
+#pragma mark - Agent button
+
+- (UIBarButtonItem *)agentButton {
+	if (!_agentButton) {
+		_agentButton = [[UIBarButtonItem alloc] initWithTitle:GRID_WORLD_AGENT_BUTTON_TITLE style:UIBarButtonItemStylePlain target:self action:@selector(agentButtonTouched)];
+	}
+	
+	return _agentButton;
+}
+
+#pragma mark - Agent button touched
+
+- (void)agentButtonTouched {
+	NSLog(@"agent button touched");
 }
 
 #pragma mark - Step button
@@ -355,6 +421,24 @@ using namespace std;
 	GridCell cell = mGrid.gridCellForRowAndCol(row, col);
 	
 	return cell.reward();
+}
+
+#pragma mark - Menu delegate 
+
+- (void)didSelectAlgorithmType:(AlgorithmType)algorithmType {
+	NSLog(@"did select algorithm type %lu", algorithmType);
+	
+	NSString *title;
+	
+	if (algorithmType == AlgorithmTypeValueIteration) {
+		title = GRID_WORLD_VALUE_ITERATION_NAV_ITEM_TITLE;
+	}
+	
+	else {
+		title = GRID_WORLD_REINFORCEMENT_LEARNING_NAV_ITEM_TITLE;
+	}
+	
+	[self.navigationItem setTitle:title];
 }
 
 - (void)didReceiveMemoryWarning

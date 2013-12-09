@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "MenuButtonViewController.h"
 #import "GridView.h"
 
-@interface GridViewController : UIViewController <GridViewDelegate>
+@interface GridViewController : UIViewController <MenuDelegate, GridViewDelegate>
 
 @end
