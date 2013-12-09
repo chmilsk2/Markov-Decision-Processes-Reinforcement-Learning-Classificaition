@@ -7,7 +7,6 @@
 //
 
 #import "GridView.h"
-#import "GridCellView.h"
 
 #define GRID_WORLD_HORIZONATAL_MARGIN_LOWER_BOUND 60
 
@@ -125,13 +124,13 @@
 			}
 			
 			if (gridCellViewType == GridCellViewTypeNonterminal || gridCellViewType == GridCellViewTypeStart) {
-				NSArray *shownPolicyViewTypes;
+				PolicyViewType shownPolicyViewType = PolicyViewTypeUp;
 				
-				if ([self.delegate respondsToSelector:@selector(shownPolicyViewTypesForRow:col:)]) {
-					shownPolicyViewTypes = [self.delegate shownPolicyViewTypesForRow:(int)row col:(int)col];
+				if ([self.delegate respondsToSelector:@selector(shownPolicyViewTypeForRow:col:)]) {
+					shownPolicyViewType = [self.delegate shownPolicyViewTypeForRow:(int)row col:(int)col];
 				}
 				
-				[gridCellView showPolicyViewTypes:shownPolicyViewTypes];
+				[gridCellView showPolicyViewType:shownPolicyViewType];
 			}
 		}
 	}

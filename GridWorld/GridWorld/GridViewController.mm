@@ -367,9 +367,7 @@ using namespace std;
 	return gridCellViewType;
 }
 
-- (NSArray *)shownPolicyViewTypesForRow:(int)row col:(int)col {
-	NSMutableArray *shownPolicyViewTypes = [NSMutableArray array];
-	
+- (PolicyViewType)shownPolicyViewTypeForRow:(int)row col:(int)col {
 	GridCell cell = mGrid.gridCellForRowAndCol(row, col);
 	
 	GridCell upCell = mGrid.gridCellForRowAndCol(row-1, col);
@@ -377,44 +375,36 @@ using namespace std;
 	GridCell leftCell = mGrid.gridCellForRowAndCol(row, col-1);
 	GridCell rightCell = mGrid.gridCellForRowAndCol(row, col+1);
 	
-	NSMutableArray *nonWallPolicyViewTypes = [NSMutableArray array];
-	
 	PolicyViewType maxPolicyViewType;
 	double maxCellUtility = cell.utility();
 	
 	if (upCell.type() != GridCellType::GridCellTypeWall && upCell.utility() >= maxCellUtility) {
 		maxPolicyViewType = PolicyViewTypeUp;
 		maxCellUtility = upCell.utility();
-		[nonWallPolicyViewTypes addObject:@(PolicyViewTypeUp)];
 	}
 	
 	if (downCell.type() != GridCellType::GridCellTypeWall && downCell.utility() >= maxCellUtility) {
 		maxPolicyViewType = PolicyViewTypeDown;
 		maxCellUtility = downCell.utility();
-		[nonWallPolicyViewTypes addObject:@(PolicyViewTypeDown)];
 	}
 	
 	if (leftCell.type() != GridCellType::GridCellTypeWall && leftCell.utility() >= maxCellUtility) {
 		maxPolicyViewType = PolicyViewTypeLeft;
 		maxCellUtility = leftCell.utility();
-		[nonWallPolicyViewTypes addObject:@(PolicyViewTypeLeft)];
 	}
 	
 	if (rightCell.type() != GridCellType::GridCellTypeWall && rightCell.utility() >= maxCellUtility) {
 		maxPolicyViewType = PolicyViewTypeRight;
 		maxCellUtility = rightCell.utility();
-		[nonWallPolicyViewTypes addObject:@(PolicyViewTypeRight)];
 	}
 	
-	if (maxCellUtility == 0) {
-		[shownPolicyViewTypes addObjectsFromArray:nonWallPolicyViewTypes];
+	// by default, show all initial policies pointing up
+	if (maxCellUtility == 0 || (cell.utility() == 0 && (upCell.type() == GridCellType::GridCellTypeTerminal || downCell.type() == GridCellType::GridCellTypeTerminal ||
+		leftCell.type() == GridCellType::GridCellTypeTerminal || rightCell.type() == GridCellType::GridCellTypeTerminal))) {
+		maxPolicyViewType = PolicyViewTypeUp;
 	}
 	
-	else {
-		[shownPolicyViewTypes addObject:@(maxPolicyViewType)];
-	}
-	
-	return [shownPolicyViewTypes copy];
+	return maxPolicyViewType;
 }
 
 - (double)rewardForRow:(int)row col:(int)col {

@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "GridCellView.h"
 
 typedef NS_ENUM(NSUInteger, GridCellViewType) {
 	GridCellViewTypeWall,
@@ -23,7 +24,7 @@ typedef NS_ENUM(NSUInteger, GridCellViewType) {
 - (NSUInteger)numberOfGridCols;
 - (GridCellViewType)gridCellViewTypeForRow:(int)row col:(int)col;
 - (double)rewardForRow:(int)row col:(int)col;
-- (NSArray *)shownPolicyViewTypesForRow:(int)row col:(int)col ;
+- (PolicyViewType)shownPolicyViewTypeForRow:(int)row col:(int)col ;
 
 @end
 

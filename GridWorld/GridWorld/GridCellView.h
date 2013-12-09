@@ -22,6 +22,6 @@ typedef NS_ENUM(NSUInteger, PolicyViewType) {
 @property (nonatomic, strong) UILabel *utilityLabel;
 
 - (id)initWithFrame:(CGRect)frame color:(UIColor *)color;
-- (void)showPolicyViewTypes:(NSArray *)policyViewTypes;
+- (void)showPolicyViewType:(PolicyViewType)policyViewType;
 
 @end

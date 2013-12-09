@@ -48,41 +48,37 @@
     return self;
 }
 
-#pragma mark - Show Policy View Types
+#pragma mark - Show policy view type
 
-- (void)showPolicyViewTypes:(NSArray *)policyViewTypes {
+- (void)showPolicyViewType:(PolicyViewType)policyViewType {
 	NSMutableArray *hiddenPolicyViews = [NSMutableArray arrayWithObjects:_policyViewUp, _policyViewDown, _policyViewLeft, _policyViewRight, nil];
 	NSMutableArray *shownPolicyViews = [NSMutableArray array];
+		
+	if (policyViewType == PolicyViewTypeUp) {
+		[shownPolicyViews addObject:_policyViewUp];
+		[hiddenPolicyViews removeObject:_policyViewUp];
+	}
 	
-	for (NSNumber *type in policyViewTypes) {
-		PolicyViewType policyViewType = (PolicyViewType)type.unsignedIntegerValue;
-		
-		if (policyViewType == PolicyViewTypeUp) {
-			[shownPolicyViews addObject:_policyViewUp];
-			[hiddenPolicyViews removeObject:_policyViewUp];
-		}
-		
-		else if (policyViewType == PolicyViewTypeDown) {
-			[shownPolicyViews addObject:_policyViewDown];
-			[hiddenPolicyViews removeObject:_policyViewDown];
-		}
-		
-		else if (policyViewType == PolicyViewTypeLeft) {
-			[shownPolicyViews addObject:_policyViewLeft];
-			[hiddenPolicyViews removeObject:_policyViewLeft];
-		}
-		
-		else if (policyViewType == PolicyViewTypeRight) {
-			[shownPolicyViews addObject:_policyViewRight];
-			[hiddenPolicyViews removeObject:_policyViewRight];
-		}
+	else if (policyViewType == PolicyViewTypeDown) {
+		[shownPolicyViews addObject:_policyViewDown];
+		[hiddenPolicyViews removeObject:_policyViewDown];
+	}
+	
+	else if (policyViewType == PolicyViewTypeLeft) {
+		[shownPolicyViews addObject:_policyViewLeft];
+		[hiddenPolicyViews removeObject:_policyViewLeft];
+	}
+	
+	else if (policyViewType == PolicyViewTypeRight) {
+		[shownPolicyViews addObject:_policyViewRight];
+		[hiddenPolicyViews removeObject:_policyViewRight];
 	}
 	
 	[self showPolicyViews:shownPolicyViews];
 	[self hidePolicyViews:hiddenPolicyViews];
 }
 
-#pragma mark - Show Policy View Types
+#pragma mark - Show policy view types
 
 - (void)showPolicyViews:(NSArray *)policyViews {
 	for (TriangleView *triangleView in policyViews) {
@@ -90,7 +86,7 @@
 	}
 }
 
-#pragma mark - Hide Policy Views
+#pragma mark - Hide policy view types
 
 - (void)hidePolicyViews:(NSArray *)policyViews {
 	for (TriangleView *triangleView in policyViews) {
