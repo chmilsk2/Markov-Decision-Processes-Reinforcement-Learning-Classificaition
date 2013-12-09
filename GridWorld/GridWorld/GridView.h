@@ -23,6 +23,7 @@ typedef NS_ENUM(NSUInteger, GridCellViewType) {
 - (NSUInteger)numberOfGridCols;
 - (GridCellViewType)gridCellViewTypeForRow:(int)row col:(int)col;
 - (double)rewardForRow:(int)row col:(int)col;
+- (NSArray *)shownPolicyViewTypesForRow:(int)row col:(int)col ;
 
 @end
 
@@ -32,5 +33,6 @@ typedef NS_ENUM(NSUInteger, GridCellViewType) {
 
 - (void)setUtilityLabelText:(NSString *)text forGridCellAtRow:(NSUInteger)row col:(NSUInteger)col;
 - (void)addCellViews;
+- (void)showPolicies;
 
 @end

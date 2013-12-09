@@ -62,16 +62,16 @@
 			UIColor *cellColor;
 			
 			if (cellViewType == GridCellViewTypeWall) {
-				cellColor = [UIColor blackColor];
+				cellColor = [UIColor colorWithWhite:0.7 alpha:1.0];
 			}
 		
 			else if (cellViewType == GridCellViewTypeNonterminal) {
-				cellColor = [UIColor colorWithWhite:0.8 alpha:1.0];
+				cellColor = [UIColor colorWithWhite:0.9 alpha:1.0];
 				text = [NSString stringWithFormat:@"%.2f", reward];
 			}
 			
 			else if (cellViewType == GridCellViewTypeStart) {
-				cellColor = [UIColor colorWithWhite:0.7 alpha:1.0];
+				cellColor = [UIColor colorWithWhite:0.8 alpha:1.0];
 				text = @"Start";
 			}
 			
@@ -98,6 +98,43 @@
 	}
 	
 	_gridCellViews = [gridCellViews copy];
+}
+
+#pragma mark - Show Policies
+
+- (void)showPolicies {
+	NSUInteger numberOfRows = 0;
+	NSUInteger numberOfCols = 0;
+	
+	if ([self.delegate respondsToSelector:@selector(numberOfGridRows)]) {
+		numberOfRows = [self.delegate numberOfGridRows];
+	}
+	
+	if ([self.delegate respondsToSelector:@selector(numberOfGridCols)]) {
+		numberOfCols = [self.delegate numberOfGridCols];
+	}
+
+	for (NSUInteger row = 0; row < numberOfRows; row++) {
+		for (NSUInteger col = 0; col < numberOfCols; col++) {
+			GridCellView *gridCellView = [self gridCellViewForRow:row col:col];
+			
+			GridCellViewType gridCellViewType = GridCellViewTypeWall;
+		
+			if ([self.delegate respondsToSelector:@selector(gridCellViewTypeForRow:col:)]) {
+				gridCellViewType = [self.delegate gridCellViewTypeForRow:(int)row col:(int)col];
+			}
+			
+			if (gridCellViewType == GridCellViewTypeNonterminal || gridCellViewType == GridCellViewTypeStart) {
+				NSArray *shownPolicyViewTypes;
+				
+				if ([self.delegate respondsToSelector:@selector(shownPolicyViewTypesForRow:col:)]) {
+					shownPolicyViewTypes = [self.delegate shownPolicyViewTypesForRow:(int)row col:(int)col];
+				}
+				
+				[gridCellView showPolicyViewTypes:shownPolicyViewTypes];
+			}
+		}
+	}
 }
 
 #pragma mark - Set Utility Label for cell at row and col

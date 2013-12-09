@@ -10,6 +10,8 @@
 #import "ValueIterationOperation.h"
 #import "Grid.h"
 #import "GridCell.h"
+#import "GridView.h"
+#import "GridCellView.h"
 #import <vector>
 
 using namespace std;
@@ -51,6 +53,7 @@ using namespace std;
 	mGrid.sort();
 	[self showGrid];
 	[self showUtilities];
+	[self showPolicies];
 }
 
 #pragma mark - Navigation setup
@@ -76,7 +79,19 @@ using namespace std;
 		for (int col = 0; col < mGrid.numberOfCols(); col++) {
 			GridCell cell = mGrid.gridCellForRowAndCol(row, col);
 			
-			[_gridView setUtilityLabelText:[NSString stringWithFormat:@"%f", cell.utility()] forGridCellAtRow:row col:col];
+			if (cell.type() != GridCellType::GridCellTypeWall) {
+				[_gridView setUtilityLabelText:[NSString stringWithFormat:@"%f", cell.utility()] forGridCellAtRow:row col:col];
+			}
+		}
+	}
+}
+
+- (void)showPolicies {
+	for (int row = 0; row < mGrid.numberOfRows(); row++) {
+		for (int col = 0; col < mGrid.numberOfCols(); col++) {
+			GridCell cell = mGrid.gridCellForRowAndCol(row, col);
+			
+			[_gridView showPolicies];
 		}
 	}
 }
@@ -215,6 +230,7 @@ using namespace std;
 	mGrid.resetUtilities();
 	
 	[self showUtilities];
+	[self showPolicies];
 }
 
 #pragma mark - Value iteration
@@ -223,17 +239,10 @@ using namespace std;
 	ValueIterationOperation *valueIterationOperation = [[ValueIterationOperation alloc] initWithGrid:mGrid discountFactor:GRID_WORLD_DISCOUNT_FACTOR intendedOutcomeProbabilitiy:GRID_WORLD_INTENDED_OUTCOME_PROBABILITIY unIntendedOutcomeProbabilitiy:GRID_WORLD_UNINTENDED_OUTCOME_PROBABILITIY];
 	
 	valueIterationOperation.valueIterationCompletionBlock = ^(NSArray *utilities, Grid grid){
-		for (NSUInteger row = 0; row < mGrid.numberOfRows(); row++) {
-			for (NSUInteger col = 0; col < mGrid.numberOfCols(); col++) {
-				NSUInteger offset = row*mGrid.numberOfCols() + col;
-				
-				NSNumber *utility = utilities[offset];
-				
-				[_gridView setUtilityLabelText:[NSString stringWithFormat:@"%f", utility.doubleValue] forGridCellAtRow:row col:col];
-			}
-		}
-		
 		mGrid = grid;
+		
+		[self showUtilities];
+		[self showPolicies];
 	};
 	
 	[_queue addOperation:valueIterationOperation];
@@ -290,6 +299,35 @@ using namespace std;
 	}
 	
 	return gridCellViewType;
+}
+
+- (NSArray *)shownPolicyViewTypesForRow:(int)row col:(int)col {
+	NSMutableArray *shownPolicyViewTypes = [NSMutableArray array];
+	
+	GridCell cell = mGrid.gridCellForRowAndCol(row, col);
+	
+	GridCell upCell = mGrid.gridCellForRowAndCol(row-1, col);
+	GridCell downCell = mGrid.gridCellForRowAndCol(row+1, col);
+	GridCell leftCell = mGrid.gridCellForRowAndCol(row, col-1);
+	GridCell rightCell = mGrid.gridCellForRowAndCol(row, col+1);
+	
+	if (upCell.type() != GridCellType::GridCellTypeWall && upCell.utility() >= cell.utility()) {
+		[shownPolicyViewTypes addObject:[NSNumber numberWithUnsignedInteger:PolicyViewTypeUp]];
+	}
+	
+	if (downCell.type() != GridCellType::GridCellTypeWall && downCell.utility() >= cell.utility()) {
+		[shownPolicyViewTypes addObject:[NSNumber numberWithUnsignedInteger:PolicyViewTypeDown]];
+	}
+	
+	if (leftCell.type() != GridCellType::GridCellTypeWall && leftCell.utility() >= cell.utility()) {
+		[shownPolicyViewTypes addObject:[NSNumber numberWithUnsignedInteger:PolicyViewTypeLeft]];
+	}
+	
+	if (rightCell.type() != GridCellType::GridCellTypeWall && rightCell.utility() >= cell.utility()) {
+		[shownPolicyViewTypes addObject:[NSNumber numberWithUnsignedInteger:PolicyViewTypeRight]];
+	}
+	
+	return [shownPolicyViewTypes copy];
 }
 
 - (double)rewardForRow:(int)row col:(int)col {

@@ -8,11 +8,20 @@
 
 #import <UIKit/UIKit.h>
 
+typedef NS_ENUM(NSUInteger, PolicyViewType) {
+	PolicyViewTypeUp,
+	PolicyViewTypeDown,
+	PolicyViewTypeLeft,
+	PolicyViewTypeRight
+};
+
 @interface GridCellView : UIView
 
+@property (nonatomic, strong) NSArray *policyViews;
 @property (nonatomic, strong) UILabel *rewardLabel;
 @property (nonatomic, strong) UILabel *utilityLabel;
 
 - (id)initWithFrame:(CGRect)frame color:(UIColor *)color;
+- (void)showPolicyViewTypes:(NSArray *)policyViewTypes;
 
 @end

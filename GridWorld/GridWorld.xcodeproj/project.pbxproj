@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0552FCE718553F8F00E43199 /* TriangleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0552FCE618553F8F00E43199 /* TriangleView.m */; };
 		05951C1918538BDC00A84329 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05951C1818538BDC00A84329 /* Foundation.framework */; };
 		05951C1B18538BDC00A84329 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05951C1A18538BDC00A84329 /* CoreGraphics.framework */; };
 		05951C1D18538BDC00A84329 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05951C1C18538BDC00A84329 /* UIKit.framework */; };
@@ -39,6 +40,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0552FCE518553F8F00E43199 /* TriangleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TriangleView.h; sourceTree = "<group>"; };
+		0552FCE618553F8F00E43199 /* TriangleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TriangleView.m; sourceTree = "<group>"; };
 		05951C1518538BDC00A84329 /* GridWorld.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GridWorld.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		05951C1818538BDC00A84329 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		05951C1A18538BDC00A84329 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -196,6 +199,8 @@
 				05951C5B1853A8CB00A84329 /* GridView.m */,
 				05951C5D1853B7CE00A84329 /* GridCellView.h */,
 				05951C5E1853B7CE00A84329 /* GridCellView.m */,
+				0552FCE518553F8F00E43199 /* TriangleView.h */,
+				0552FCE618553F8F00E43199 /* TriangleView.m */,
 			);
 			name = "View ";
 			sourceTree = "<group>";
@@ -310,6 +315,7 @@
 				05951C4F18538C5F00A84329 /* GridViewController.mm in Sources */,
 				05951C2518538BDC00A84329 /* main.m in Sources */,
 				05951C5C1853A8CB00A84329 /* GridView.m in Sources */,
+				0552FCE718553F8F00E43199 /* TriangleView.m in Sources */,
 				05951C5F1853B7CE00A84329 /* GridCellView.m in Sources */,
 				05951C681853D1B200A84329 /* GridCell.cpp in Sources */,
 				05951C651853D14E00A84329 /* Grid.cpp in Sources */,
