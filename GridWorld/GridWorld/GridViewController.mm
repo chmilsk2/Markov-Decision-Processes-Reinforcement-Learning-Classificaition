@@ -16,7 +16,7 @@
 
 using namespace std;
 
-#define GRID_WORLD_DISCOUNT_FACTOR .70
+#define GRID_WORLD_DISCOUNT_FACTOR .99
 #define GRID_WORLD_INTENDED_OUTCOME_PROBABILITIY .80
 #define GRID_WORLD_UNINTENDED_OUTCOME_PROBABILITIY .10
 #define GRID_WORLD_NAV_ITEM_TITLE @"Grid World"
@@ -311,20 +311,41 @@ using namespace std;
 	GridCell leftCell = mGrid.gridCellForRowAndCol(row, col-1);
 	GridCell rightCell = mGrid.gridCellForRowAndCol(row, col+1);
 	
-	if (upCell.type() != GridCellType::GridCellTypeWall && upCell.utility() >= cell.utility()) {
-		[shownPolicyViewTypes addObject:[NSNumber numberWithUnsignedInteger:PolicyViewTypeUp]];
+	NSMutableArray *nonWallPolicyViewTypes = [NSMutableArray array];
+	
+	PolicyViewType maxPolicyViewType;
+	double maxCellUtility = cell.utility();
+	
+	if (upCell.type() != GridCellType::GridCellTypeWall && upCell.utility() >= maxCellUtility) {
+		maxPolicyViewType = PolicyViewTypeUp;
+		maxCellUtility = upCell.utility();
+		[nonWallPolicyViewTypes addObject:@(PolicyViewTypeUp)];
 	}
 	
-	if (downCell.type() != GridCellType::GridCellTypeWall && downCell.utility() >= cell.utility()) {
-		[shownPolicyViewTypes addObject:[NSNumber numberWithUnsignedInteger:PolicyViewTypeDown]];
+	if (downCell.type() != GridCellType::GridCellTypeWall && downCell.utility() >= maxCellUtility) {
+		maxPolicyViewType = PolicyViewTypeDown;
+		maxCellUtility = downCell.utility();
+		[nonWallPolicyViewTypes addObject:@(PolicyViewTypeDown)];
 	}
 	
-	if (leftCell.type() != GridCellType::GridCellTypeWall && leftCell.utility() >= cell.utility()) {
-		[shownPolicyViewTypes addObject:[NSNumber numberWithUnsignedInteger:PolicyViewTypeLeft]];
+	if (leftCell.type() != GridCellType::GridCellTypeWall && leftCell.utility() >= maxCellUtility) {
+		maxPolicyViewType = PolicyViewTypeLeft;
+		maxCellUtility = leftCell.utility();
+		[nonWallPolicyViewTypes addObject:@(PolicyViewTypeLeft)];
 	}
 	
-	if (rightCell.type() != GridCellType::GridCellTypeWall && rightCell.utility() >= cell.utility()) {
-		[shownPolicyViewTypes addObject:[NSNumber numberWithUnsignedInteger:PolicyViewTypeRight]];
+	if (rightCell.type() != GridCellType::GridCellTypeWall && rightCell.utility() >= maxCellUtility) {
+		maxPolicyViewType = PolicyViewTypeRight;
+		maxCellUtility = rightCell.utility();
+		[nonWallPolicyViewTypes addObject:@(PolicyViewTypeRight)];
+	}
+	
+	if (maxCellUtility == 0) {
+		[shownPolicyViewTypes addObjectsFromArray:nonWallPolicyViewTypes];
+	}
+	
+	else {
+		[shownPolicyViewTypes addObject:@(maxPolicyViewType)];
 	}
 	
 	return [shownPolicyViewTypes copy];
