@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>B3E1D4BA-3FC0-44C0-9E53-56E908285703</string>
+	<key>IDESourceControlProjectName</key>
+	<string>ReinforcementLearning</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>2C1B7802-2ADE-4C3A-934D-0DCFA5AE2808</key>
+		<string>ssh://github.com/chmilsk2/Markov-Decision-Processes-Reinforcement-Learning-Classificaition.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>ReinforcementLearning/ReinforcementLearning.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>2C1B7802-2ADE-4C3A-934D-0DCFA5AE2808</key>
+		<string>../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>ssh://github.com/chmilsk2/Markov-Decision-Processes-Reinforcement-Learning-Classificaition.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>2C1B7802-2ADE-4C3A-934D-0DCFA5AE2808</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>2C1B7802-2ADE-4C3A-934D-0DCFA5AE2808</string>
+			<key>IDESourceControlWCCName</key>
+			<string>Markov-Decision-Processes-Reinforcement-Learning-Classificaition</string>
+		</dict>
+	</array>
+</dict>
+</plist>

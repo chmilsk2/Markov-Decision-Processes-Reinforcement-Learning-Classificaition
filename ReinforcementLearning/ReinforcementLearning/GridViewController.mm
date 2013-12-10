@@ -56,7 +56,7 @@ using namespace std;
 	mGrid = [self parseGrid];
 	mGrid.sort();
 	[self showGrid];
-	[self showUtilities];
+	[self showQValues];
 	[self showPolicies];
 }
 
@@ -76,28 +76,14 @@ using namespace std;
 	[self.gridView setNeedsLayout];
 }
 
-#pragma mark - Show utilities
-
-- (void)showUtilities {
-	for (int row = 0; row < mGrid.numberOfRows(); row++) {
-		for (int col = 0; col < mGrid.numberOfCols(); col++) {
-			GridCell cell = mGrid.gridCellForRowAndCol(row, col);
-			
-			if (cell.type() != GridCellType::GridCellTypeWall) {
-				[_gridView setUtilityLabelText:[NSString stringWithFormat:@"%f", cell.utility()] forGridCellAtRow:row col:col];
-			}
-		}
-	}
+#pragma mark - Show q values
+	
+- (void)showQValues {
+	[_gridView showQValues];
 }
 
 - (void)showPolicies {
-	for (int row = 0; row < mGrid.numberOfRows(); row++) {
-		for (int col = 0; col < mGrid.numberOfCols(); col++) {
-			GridCell cell = mGrid.gridCellForRowAndCol(row, col);
-			
-			[_gridView showPolicies];
-		}
-	}
+	[_gridView showPolicies];
 }
 
 #pragma mark - Parse grid
@@ -266,9 +252,9 @@ using namespace std;
 - (void)resetButtonTouched {
 	NSLog(@"reset button touched");
 	
-	mGrid.resetUtilities();
+	// reset all q values (this will directly affect the utility values)
 	
-	[self showUtilities];
+	[self showQValues];
 	[self showPolicies];
 }
 
@@ -331,50 +317,42 @@ using namespace std;
 	return gridCellViewType;
 }
 
-- (PolicyViewType)shownPolicyViewTypeForRow:(int)row col:(int)col {
-	GridCell cell = mGrid.gridCellForRowAndCol(row, col);
-	
-	GridCell upCell = mGrid.gridCellForRowAndCol(row-1, col);
-	GridCell downCell = mGrid.gridCellForRowAndCol(row+1, col);
-	GridCell leftCell = mGrid.gridCellForRowAndCol(row, col-1);
-	GridCell rightCell = mGrid.gridCellForRowAndCol(row, col+1);
-	
-	PolicyViewType maxPolicyViewType;
-	double maxCellUtility = cell.utility();
-	
-	if (upCell.type() != GridCellType::GridCellTypeWall && upCell.utility() >= maxCellUtility) {
-		maxPolicyViewType = PolicyViewTypeUp;
-		maxCellUtility = upCell.utility();
-	}
-	
-	if (downCell.type() != GridCellType::GridCellTypeWall && downCell.utility() >= maxCellUtility) {
-		maxPolicyViewType = PolicyViewTypeDown;
-		maxCellUtility = downCell.utility();
-	}
-	
-	if (leftCell.type() != GridCellType::GridCellTypeWall && leftCell.utility() >= maxCellUtility) {
-		maxPolicyViewType = PolicyViewTypeLeft;
-		maxCellUtility = leftCell.utility();
-	}
-	
-	if (rightCell.type() != GridCellType::GridCellTypeWall && rightCell.utility() >= maxCellUtility) {
-		maxPolicyViewType = PolicyViewTypeRight;
-		maxCellUtility = rightCell.utility();
-	}
-	
-	// by default, show all initial policies pointing up
-	if (maxCellUtility == 0 || (cell.utility() == 0 && (upCell.type() == GridCellType::GridCellTypeTerminal || downCell.type() == GridCellType::GridCellTypeTerminal ||
-														leftCell.type() == GridCellType::GridCellTypeTerminal || rightCell.type() == GridCellType::GridCellTypeTerminal))) {
-		maxPolicyViewType = PolicyViewTypeUp;
-	}
-	
-	return maxPolicyViewType;
-}
-
 - (double)rewardForRow:(int)row col:(int)col {
 	GridCell cell = mGrid.gridCellForRowAndCol(row, col);
 	
 	return cell.reward();
+}
+
+- (double)qValueForDirection:(Direction)direction atRow:(int)row col:(int)col {
+	GridCell cell = mGrid.gridCellForRowAndCol(row, col);
+	
+	double qValue = 0;
+	
+	if (direction == DirectionUp) {
+		qValue = cell.qValueForGridCellDirection(GridCellDirection::GridCellDirectionUp);
+	}
+	
+	else if (direction == DirectionDown) {
+		qValue = cell.qValueForGridCellDirection(GridCellDirection::GridCellDirectionDown);
+	}
+	
+	else if (direction == DirectionLeft) {
+		qValue = cell.qValueForGridCellDirection(GridCellDirection::GridCellDirectionLeft);
+	}
+	
+	else if (direction == DirectionRight) {
+		qValue = cell.qValueForGridCellDirection(GridCellDirection::GridCellDirectionRight);
+	}
+	
+	return qValue;
+}
+
+- (int)numberOfQValues {
+	GridCell cell = mGrid.gridCellForRowAndCol(0, 0);
+	
+	int numberOfQValues = cell.numberOfQValues();
+	
+	return numberOfQValues;
 }
 
 - (void)didReceiveMemoryWarning

@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Direction.h"
 
 typedef NS_ENUM(NSUInteger, PolicyViewType) {
 	PolicyViewTypeUp,
@@ -18,10 +19,12 @@ typedef NS_ENUM(NSUInteger, PolicyViewType) {
 @interface GridCellView : UIView
 
 @property (nonatomic, strong) NSArray *policyViews;
-@property (nonatomic, strong) UILabel *rewardLabel;
-@property (nonatomic, strong) UILabel *utilityLabel;
+@property (nonatomic, strong) UILabel *centerLabel;
 
 - (id)initWithFrame:(CGRect)frame color:(UIColor *)color;
+- (void)setQValueLabelText:(NSString *)text forDirection:(Direction)direction;
 - (void)showPolicyViewType:(PolicyViewType)policyViewType;
+- (void)showQValues;
+- (void)showCenterLabel;
 
 @end

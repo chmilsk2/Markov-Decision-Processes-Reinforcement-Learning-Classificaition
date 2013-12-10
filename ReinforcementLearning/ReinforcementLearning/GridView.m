@@ -66,12 +66,10 @@
 			
 			else if (cellViewType == GridCellViewTypeNonterminal) {
 				cellColor = [UIColor colorWithWhite:0.9 alpha:1.0];
-				text = [NSString stringWithFormat:@"%.2f", reward];
 			}
 			
 			else if (cellViewType == GridCellViewTypeStart) {
 				cellColor = [UIColor colorWithWhite:0.8 alpha:1.0];
-				text = @"Start";
 			}
 			
 			else if (cellViewType == GridCellViewTypeTerminal) {
@@ -88,7 +86,11 @@
 			
 			GridCellView *gridCellView = [[GridCellView alloc] initWithFrame:CGRectZero color:cellColor];
 			
-			[gridCellView.rewardLabel setText:text];
+			// show center label if start or terminal cells
+			if (cellViewType == GridCellViewTypeTerminal || cellViewType == GridCellViewTypeStart) {
+				[gridCellView.centerLabel setText:text];
+				[gridCellView showCenterLabel];
+			}
 			
 			gridCellViews[row*numberOfCols + col] = gridCellView;
 			
@@ -99,7 +101,84 @@
 	_gridCellViews = [gridCellViews copy];
 }
 
-#pragma mark - Show Policies
+#pragma mark - Show q values
+
+- (void)showQValues {
+	NSUInteger numberOfRows = 0;
+	NSUInteger numberOfCols = 0;
+	
+	if ([self.delegate respondsToSelector:@selector(numberOfGridRows)]) {
+		numberOfRows = [self.delegate numberOfGridRows];
+	}
+	
+	if ([self.delegate respondsToSelector:@selector(numberOfGridCols)]) {
+		numberOfCols = [self.delegate numberOfGridCols];
+	}
+	
+	for (NSUInteger row = 0; row < numberOfRows; row++) {
+		for (NSUInteger col = 0; col < numberOfCols; col++) {
+			GridCellView *gridCellView = [self gridCellViewForRow:row col:col];
+			
+			GridCellViewType gridCellViewType = GridCellViewTypeWall;
+			
+			if ([self.delegate respondsToSelector:@selector(gridCellViewTypeForRow:col:)]) {
+				gridCellViewType = [self.delegate gridCellViewTypeForRow:(int)row col:(int)col];
+			}
+			
+			if (gridCellViewType == GridCellViewTypeNonterminal || gridCellViewType == GridCellViewTypeStart) {
+				int numberOfQValues = 0;
+				
+				if ([self.delegate respondsToSelector:@selector(numberOfQValues)]) {
+					numberOfQValues = [self.delegate numberOfQValues];
+				}
+				
+				for (int i = 0; i < numberOfQValues; i++) {
+					double qValue = 0;
+					Direction direction = DirectionUp;
+					
+					if (i == DirectionUp) {
+						if ([self.delegate respondsToSelector:@selector(qValueForDirection:atRow:col:)]) {
+							qValue = [self.delegate qValueForDirection:DirectionUp atRow:(int)row col:(int)col];
+						}
+						
+						direction = DirectionUp;
+					}
+					
+					else if (i == DirectionDown) {
+						if ([self.delegate respondsToSelector:@selector(qValueForDirection:atRow:col:)]) {
+							qValue = [self.delegate qValueForDirection:DirectionUp atRow:(int)row col:(int)col];
+						}
+							
+						direction = DirectionDown;
+					}
+					
+					else if (i == DirectionLeft) {
+						if ([self.delegate respondsToSelector:@selector(qValueForDirection:atRow:col:)]) {
+							qValue = [self.delegate qValueForDirection:DirectionUp atRow:(int)row col:(int)col];
+						}
+						
+						direction = DirectionLeft;
+					}
+					
+					else if (i == DirectionRight) {
+						if ([self.delegate respondsToSelector:@selector(qValueForDirection:atRow:col:)]) {
+							qValue = [self.delegate qValueForDirection:DirectionUp atRow:(int)row col:(int)col];
+						}
+						
+						direction = DirectionRight;
+					}
+					
+					NSString *qValueText = [NSString stringWithFormat:@"%.2f", qValue];
+					
+					[gridCellView setQValueLabelText:qValueText forDirection:direction];
+					[gridCellView showQValues];
+				}
+			}
+		}
+	}
+}
+
+#pragma mark - Show policies
 
 - (void)showPolicies {
 	NSUInteger numberOfRows = 0;
@@ -134,14 +213,6 @@
 			}
 		}
 	}
-}
-
-#pragma mark - Set Utility Label for cell at row and col
-
-- (void)setUtilityLabelText:(NSString *)text forGridCellAtRow:(NSUInteger)row col:(NSUInteger)col {
-	GridCellView *gridCellView = [self gridCellViewForRow:row col:col];
-	
-	[gridCellView.utilityLabel setText:text];
 }
 
 #pragma mark - Grid cell view

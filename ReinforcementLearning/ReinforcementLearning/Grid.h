@@ -34,14 +34,8 @@ public:
 	// cell for row, col
 	GridCell & gridCellForRowAndCol(int row, int col);
 	
-	// set utility for row, col
-	void setUtilityForRowAndCol(int row, int col, double utility);
-	
 	// sort in row major order
 	void sort();
-	
-	// reset utilities
-	void resetUtilities();
 	
 	// print
 	void print();

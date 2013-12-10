@@ -8,14 +8,22 @@
 
 #include "GridCell.h"
 
+#define NUMBER_OF_Q_VALUES 4
+
 GridCell::GridCell() {}
 
 GridCell::GridCell(GridCellType type, Coordinate coordinate, double reward):mType(type), mCoordinate(coordinate), mReward(reward) {
-	// terminal states should always have reward as the utility, all other states start out with 0 as the utility
-	mUtility = defaultUtilityForTypeWithReward(type, reward);
-}
+	mNumberOfQValues = NUMBER_OF_Q_VALUES;
+	for (int i = 0; i < mNumberOfQValues; i++) {
+		mQValues.push_back(0);
+	}
+};
 
 GridCell::~GridCell() {};
+
+int GridCell::numberOfQValues() {
+	return mNumberOfQValues;
+}
 
 GridCellType GridCell::type() {
 	return mType;
@@ -29,16 +37,10 @@ double GridCell::reward() {
 	return mReward;
 }
 
-double GridCell::utility() {
-	return mUtility;
-}
-
-void GridCell::setUtility(double utility) {
-	mUtility = utility;
-}
-
-void GridCell::resetUtility() {
-	mUtility = defaultUtilityForTypeWithReward(type(), reward());
+double GridCell::qValueForGridCellDirection(GridCellDirection gridCellDirection) {
+	int index = (int)gridCellDirection;
+	
+	return mQValues[index];
 }
 
 void GridCell::print() {
@@ -64,18 +66,5 @@ void GridCell::print() {
 	cout << "type: " << gridCellType << endl;
 	cout << "coordinate: (" << coordinate().x  << ", " << coordinate().y << ")" << endl;
 	cout << "reward: " << reward() << endl;
-	cout << "utility: " << utility() << endl;
 	cout << "---" << endl;
-}
-
-#pragma mark - Private
-
-double GridCell::defaultUtilityForTypeWithReward(GridCellType type, double reward) {
-	double utility = 0;
-	
-	if (type == GridCellType::GridCellTypeTerminal) {
-		utility = reward;
-	}
-	
-	return utility;
 }

@@ -10,8 +10,16 @@
 #define __GridWorld__GridCell__
 
 #include <iostream>
+#include <vector>
 
 using namespace std;
+
+enum class GridCellDirection {
+	GridCellDirectionUp,
+	GridCellDirectionDown,
+	GridCellDirectionLeft,
+	GridCellDirectionRight
+};
 
 enum class GridCellType {
 	GridCellTypeWall,
@@ -26,15 +34,20 @@ typedef struct {
 } Coordinate;
 
 class GridCell {
+	int mNumberOfQValues;
 	GridCellType mType;
 	Coordinate mCoordinate;
+	vector<double> mQValues;
 	double mReward;
-	double mUtility;
+	
 	
 public:
 	GridCell();
 	GridCell(GridCellType type, Coordinate coordinate, double reward);
 	~GridCell();
+	
+	// number of q values
+	int numberOfQValues();
 	
 	// type
 	GridCellType type();
@@ -45,18 +58,11 @@ public:
 	// reward
 	double reward();
 	
-	// utility
-	double utility();
-	
-	void setUtility(double utility);
-	
-	void resetUtility();
+	// q value
+	double qValueForGridCellDirection(GridCellDirection gridCellDirection);
 	
 	// print
 	void print();
-	
-private:
-	double defaultUtilityForTypeWithReward(GridCellType type, double reward);
 };
 
 #endif /* defined(__GridWorld__GridCell__) */

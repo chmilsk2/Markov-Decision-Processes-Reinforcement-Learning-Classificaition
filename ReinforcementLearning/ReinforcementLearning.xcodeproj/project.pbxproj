@@ -71,6 +71,7 @@
 		0552FD5018569B3A00E43199 /* GridCell.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GridCell.cpp; sourceTree = "<group>"; };
 		0552FD5118569B3A00E43199 /* GridCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GridCell.h; sourceTree = "<group>"; };
 		0552FD5418569CD700E43199 /* Assignment4GridWorld1.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Assignment4GridWorld1.json; sourceTree = "<group>"; };
+		0552FD561856B2A400E43199 /* Direction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Direction.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -180,6 +181,7 @@
 				0552FD4D18569B2900E43199 /* Grid.cpp */,
 				0552FD5118569B3A00E43199 /* GridCell.h */,
 				0552FD5018569B3A00E43199 /* GridCell.cpp */,
+				0552FD561856B2A400E43199 /* Direction.h */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -521,6 +523,7 @@
 				0552FD371856992300E43199 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		0552FD381856992300E43199 /* Build configuration list for PBXNativeTarget "ReinforcementLearningTests" */ = {
 			isa = XCConfigurationList;
@@ -529,6 +532,7 @@
 				0552FD3A1856992300E43199 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
