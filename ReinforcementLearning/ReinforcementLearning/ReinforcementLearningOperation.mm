@@ -39,8 +39,9 @@
 
 /** Learn the grid policy using reinforcement learning
  
- Q = blah
-
+ Q[s,a] = Q[s,a] + alpha*(N[s,a])*(r + discountFactor*max(Q[s',a') - Q[s,a]
+ s, a, r <= s', argmax f(Q[s',a'], N[s',a']),r'
+ 
  */
 
 - (void)reinforcementLearning {

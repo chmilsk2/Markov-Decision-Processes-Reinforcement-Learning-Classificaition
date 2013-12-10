@@ -41,6 +41,7 @@ class GridCell {
 	int mFrequency;
 	double mReward;
 	GridCellDirection mPolicy;
+	bool mIsDiscovered;
 	
 	
 public:
@@ -71,6 +72,11 @@ public:
 	
 	// policy
 	GridCellDirection policy();
+	
+	// is discovered
+	bool isDiscovered();
+	
+	void setIsDiscovered(bool isDiscovered);
 	
 	// print
 	void print();

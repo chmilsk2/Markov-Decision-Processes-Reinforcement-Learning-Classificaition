@@ -27,6 +27,7 @@ typedef NS_ENUM(NSUInteger, GridCellViewType) {
 - (int)numberOfQValues;
 - (double)qValueForDirection:(Direction)direction atRow:(int)row col:(int)col;
 - (PolicyViewType)shownPolicyViewTypeForRow:(int)row col:(int)col;
+- (BOOL)isDiscoveredForRow:(int)row col:(int)col;
 
 @end
 

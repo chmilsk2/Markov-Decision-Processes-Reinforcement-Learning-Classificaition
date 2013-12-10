@@ -85,9 +85,25 @@
 			}
 			
 			GridCellView *gridCellView = [[GridCellView alloc] initWithFrame:CGRectZero color:cellColor];
-			
+		
 			// show center label if start or terminal cells
-			if (cellViewType == GridCellViewTypeTerminal || cellViewType == GridCellViewTypeStart) {
+			if ((cellViewType == GridCellViewTypeTerminal || cellViewType == GridCellViewTypeStart)) {
+				if (cellViewType == GridCellViewTypeTerminal) {
+					BOOL isDiscovered = NO;
+					
+					if ([self.delegate respondsToSelector:@selector(isDiscoveredForRow:col:)]) {
+						isDiscovered = [self.delegate isDiscoveredForRow:(int)row col:(int)col];
+					}
+					
+					if (!isDiscovered) {
+						double reward = 0;
+						text = [NSString stringWithFormat:@"%.2f", reward];
+					}
+					
+					UIColor *undiscoveredBackgroundColor = [UIColor colorWithWhite:0.6 alpha:1.0];
+					[gridCellView setBackgroundColor:undiscoveredBackgroundColor];
+				}
+				
 				[gridCellView.centerLabel setText:text];
 				[gridCellView showCenterLabel];
 			}

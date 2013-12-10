@@ -26,6 +26,9 @@ GridCell::GridCell(GridCellType type, Coordinate coordinate, double reward):mTyp
 	
 	// initialize policy to up direction
 	mPolicy = GridCellDirection::GridCellDirectionUp;
+	
+	// is discovered
+	mIsDiscovered = false;
 };
 
 GridCell::~GridCell() {};
@@ -64,6 +67,16 @@ double GridCell::qValueForGridCellDirection(GridCellDirection gridCellDirection)
 	int index = (int)gridCellDirection;
 	
 	return mQValues[index];
+}
+
+#pragma mark - is discovered
+
+bool GridCell::isDiscovered() {
+	return mIsDiscovered;
+}
+
+void GridCell::setIsDiscovered(bool isDiscovered) {
+	mIsDiscovered = isDiscovered;
 }
 
 void GridCell::print() {
