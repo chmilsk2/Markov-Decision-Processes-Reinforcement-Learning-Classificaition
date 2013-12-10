@@ -277,7 +277,7 @@ using namespace std;
 - (void)valueIteration {
 	ValueIterationOperation *valueIterationOperation = [[ValueIterationOperation alloc] initWithGrid:mGrid discountFactor:GRID_WORLD_DISCOUNT_FACTOR intendedOutcomeProbabilitiy:GRID_WORLD_INTENDED_OUTCOME_PROBABILITIY unIntendedOutcomeProbabilitiy:GRID_WORLD_UNINTENDED_OUTCOME_PROBABILITIY];
 	
-	valueIterationOperation.valueIterationCompletionBlock = ^(NSArray *utilities, Grid grid){
+	valueIterationOperation.valueIterationCompletionBlock = ^(Grid grid){
 		mGrid = grid;
 		
 		[self showUtilities];

@@ -15,8 +15,6 @@
 	double mIntendedOutcomeProbability;
 	double mUnintendedOutcomeProbability;
 	Grid mGrid;
-	
-	NSMutableArray *_utilities;
 }
 
 - (id)initWithGrid:(Grid)grid discountFactor:(double)discountFactor intendedOutcomeProbabilitiy:(double)intendedOutcomeProbability unIntendedOutcomeProbabilitiy:(double)unIntendedOutcomeProbability {
@@ -27,19 +25,13 @@
 		mIntendedOutcomeProbability = intendedOutcomeProbability;
 		mUnintendedOutcomeProbability = unIntendedOutcomeProbability;
 		mGrid = grid;
-		
-        _utilities = [NSMutableArray array];
     }
 	
     return self;
 }
 
 - (void)main {
-	vector<double> utilities = [self valueIteration];
-	
-	for (auto it : utilities) {
-		[_utilities addObject:[NSNumber numberWithDouble:it]];
-	}
+	[self valueIteration];
 	
 	[self didFinish];
 }
@@ -56,7 +48,7 @@
  @param u vector for utility of state in s, initialized to 0
  */
 
-- (vector<double>)valueIteration {
+- (void)valueIteration {
 	int numberOfRows = mGrid.numberOfRows();
 	int numberOfCols = mGrid.numberOfCols();
 	
@@ -101,8 +93,6 @@
 			}
 		}
 	}
-	
-	return u;
 }
 
 #pragma mark - Utilities
@@ -168,7 +158,7 @@
 - (void)didFinish {
 	if (self.valueIterationCompletionBlock) {
 		dispatch_async(dispatch_get_main_queue(), ^{
-			self.valueIterationCompletionBlock(_utilities, mGrid);
+			self.valueIterationCompletionBlock(mGrid);
 		});
 	}
 }

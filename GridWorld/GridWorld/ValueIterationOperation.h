@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "Grid.h"
 
-typedef void(^ValueIterationHandler)(NSArray *utilities, Grid grid);
+typedef void(^ValueIterationHandler)(Grid grid);
 
 @interface ValueIterationOperation : NSOperation
 

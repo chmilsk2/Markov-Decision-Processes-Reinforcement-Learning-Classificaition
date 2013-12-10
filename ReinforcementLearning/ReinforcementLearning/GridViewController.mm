@@ -261,7 +261,14 @@ using namespace std;
 #pragma mark - Reinforcement learning
 
 - (void)reinforcementLearning {
+	ReinforcementLearningOperation *reinforcementLearningOperation = [[ReinforcementLearningOperation alloc] initWithGrid:mGrid];
 	
+	reinforcementLearningOperation.reinforcementLearningCompletionBlock = ^(Grid grid) {
+		mGrid = grid;
+		
+		[self showQValues];
+		[self showPolicies];
+	};
 }
 
 #pragma mark - Grid view

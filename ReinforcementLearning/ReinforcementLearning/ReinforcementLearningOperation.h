@@ -13,4 +13,8 @@ typedef void(^ReinforcementLearningHandler)(Grid grid);
 
 @interface ReinforcementLearningOperation : UIViewController
 
+- (id)initWithGrid:(Grid)grid;
+
+@property (copy) ReinforcementLearningHandler reinforcementLearningCompletionBlock;
+
 @end
