@@ -346,20 +346,6 @@ using namespace std;
 	return qValue;
 }
 
-- (BOOL)isDiscoveredForRow:(int)row col:(int)col {
-	BOOL isDiscovered = NO;
-	
-	GridCell cell = mGrid.gridCellForRowAndCol(row, col);
-	
-	bool cellIsDiscovered = cell.isDiscovered();
-	
-	if (cellIsDiscovered) {
-		isDiscovered = YES;
-	}
-	
-	return isDiscovered;
-}
-
 - (int)numberOfQValues {
 	return mGrid.numberOfQValuesPerCell();
 }

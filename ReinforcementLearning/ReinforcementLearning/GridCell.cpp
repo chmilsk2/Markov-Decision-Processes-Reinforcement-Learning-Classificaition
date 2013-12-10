@@ -13,9 +13,6 @@ GridCell::GridCell() {}
 GridCell::GridCell(GridCellType type, Coordinate coordinate, double reward):mType(type), mCoordinate(coordinate), mReward(reward) {
 	// initialize policy to up direction
 	mPolicy = GridCellDirection::GridCellDirectionUp;
-	
-	// is discovered
-	mIsDiscovered = false;
 };
 
 GridCell::~GridCell() {};
@@ -32,16 +29,6 @@ Coordinate GridCell::coordinate() {
 
 double GridCell::reward() {
 	return mReward;
-}
-
-#pragma mark - is discovered
-
-bool GridCell::isDiscovered() {
-	return mIsDiscovered;
-}
-
-void GridCell::setIsDiscovered(bool isDiscovered) {
-	mIsDiscovered = isDiscovered;
 }
 
 void GridCell::print() {

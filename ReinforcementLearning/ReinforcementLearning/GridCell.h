@@ -38,8 +38,6 @@ class GridCell {
 	Coordinate mCoordinate;
 	double mReward;
 	GridCellDirection mPolicy;
-	bool mIsDiscovered;
-	
 	
 public:
 	GridCell();
@@ -57,11 +55,6 @@ public:
 
 	// policy
 	GridCellDirection policy();
-	
-	// is discovered
-	bool isDiscovered();
-	
-	void setIsDiscovered(bool isDiscovered);
 	
 	// print
 	void print();
