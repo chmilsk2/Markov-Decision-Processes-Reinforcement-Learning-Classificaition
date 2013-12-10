@@ -15,17 +15,17 @@
 using namespace std;
 
 enum class GridCellDirection {
-	GridCellDirectionUp,
-	GridCellDirectionDown,
-	GridCellDirectionLeft,
-	GridCellDirectionRight
+	GridCellDirectionUp = 0,
+	GridCellDirectionDown = 1,
+	GridCellDirectionLeft = 2,
+	GridCellDirectionRight = 3
 };
 
 enum class GridCellType {
-	GridCellTypeWall,
-	GridCellTypeNonterminal,
-	GridCellTypeStart,
-	GridCellTypeTerminal
+	GridCellTypeWall = 0,
+	GridCellTypeNonterminal = 1,
+	GridCellTypeStart = 2,
+	GridCellTypeTerminal = 3
 };
 
 typedef struct {
@@ -34,11 +34,8 @@ typedef struct {
 } Coordinate;
 
 class GridCell {
-	int mNumberOfQValues;
 	GridCellType mType;
 	Coordinate mCoordinate;
-	vector<double> mQValues;
-	int mFrequency;
 	double mReward;
 	GridCellDirection mPolicy;
 	bool mIsDiscovered;
@@ -49,9 +46,6 @@ public:
 	GridCell(GridCellType type, Coordinate coordinate, double reward);
 	~GridCell();
 	
-	// number of q values
-	int numberOfQValues();
-	
 	// type
 	GridCellType type();
 	
@@ -60,16 +54,7 @@ public:
 	
 	// reward
 	double reward();
-	
-	// frequency
-	int frequency();
-	
-	// increment frequency
-	void incrementFrequency();
-	
-	// q value
-	double qValueForGridCellDirection(GridCellDirection gridCellDirection);
-	
+
 	// policy
 	GridCellDirection policy();
 	

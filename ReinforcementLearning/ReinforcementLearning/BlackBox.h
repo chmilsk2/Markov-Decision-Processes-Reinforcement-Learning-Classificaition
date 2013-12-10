@@ -12,10 +12,10 @@
 #include <iostream>
 
 enum class BlackBoxDirection {
-	BlackBoxDirectionUp,
-	BlackBoxDirectionDown,
-	BlackBoxDirectionLeft,
-	BlackBoxDirectionRight
+	BlackBoxDirectionUp = 0,
+	BlackBoxDirectionDown = 1,
+	BlackBoxDirectionLeft = 2,
+	BlackBoxDirectionRight = 3
 };
 
 class BlackBox {

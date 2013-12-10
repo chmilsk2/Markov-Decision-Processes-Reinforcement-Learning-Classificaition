@@ -1,4 +1,4 @@
-//
+ //
 //  GridViewController.m
 //  ReinforcementLearning
 //
@@ -16,25 +16,23 @@
 
 using namespace std;
 
-#define GRID_WORLD_MAX_NUMBER_OF_TRIALS 1
-#define GRID_WORLD_DISCOUNT_FACTOR .99
-#define GRID_WORLD_INTENDED_OUTCOME_PROBABILITIY .80
-#define GRID_WORLD_UNINTENDED_OUTCOME_PROBABILITIY .10
-#define GRID_WORLD_REINFORCEMENT_NAV_ITEM_TITLE @"Reinforcement Learning"
-#define GRID_WORLD_CONTINUE_BUTTON_TITLE @"Continue"
-#define GRID_WORLD_AGENT_BUTTON_TITLE @"Agent"
-#define GRID_WORLD_STEP_BUTTON_TITLE @"Step"
-#define GRID_WORLD_RESET_BUTTON_TITLE @"Reset"
-#define GRID_WORLD_GRID_FILE_NAME @"Assignment4GridWorld1"
+#define GRID_MAX_NUMBER_OF_TRIALS 10
+#define GRID_MAX_FREQUENCY 1
+#define GRID_EXPLORATION_CONSTANT 30
+#define GRID_DISCOUNT_FACTOR .99
+#define GRID_INTENDED_OUTCOME_PROBABILITIY .80
+#define GRID_UNINTENDED_OUTCOME_PROBABILITIY .10
+#define GRID_REINFORCEMENT_NAV_ITEM_TITLE @"Reinforcement Learning"
+#define GRID_STEP_BUTTON_TITLE @"Step"
+#define GRID_RESET_BUTTON_TITLE @"Reset"
+#define GRID_GRID_FILE_NAME @"Assignment4GridWorld1"
 
 @implementation GridViewController {
 	Grid mGrid;
 	BlackBox mBlackBox;
 	int mT;
 	GridView *_gridView;
-	UIBarButtonItem *_agentButton;
 	UIBarButtonItem *_stepButton;
-	UIBarButtonItem *_continueButton;
 	UIBarButtonItem *_resetButton;
 	NSOperationQueue *_queue;
 	NSUInteger _numberOfTrials;
@@ -45,12 +43,12 @@ using namespace std;
     self = [super init];
 	
     if (self) {
-		mBlackBox = BlackBox(GRID_WORLD_INTENDED_OUTCOME_PROBABILITIY, GRID_WORLD_UNINTENDED_OUTCOME_PROBABILITIY);
+		mBlackBox = BlackBox(GRID_INTENDED_OUTCOME_PROBABILITIY, GRID_UNINTENDED_OUTCOME_PROBABILITIY);
         _queue = [[NSOperationQueue alloc] init];
 		[_queue setMaxConcurrentOperationCount:1];
 		_numberOfTrials = 0;
 		mT = 0;
-    }
+	}
 	
     return self;
 }
@@ -70,8 +68,8 @@ using namespace std;
 #pragma mark - Navigation setup
 
 - (void)setUpNav {
-	[self.navigationItem setTitle:GRID_WORLD_REINFORCEMENT_NAV_ITEM_TITLE];
-	[self.navigationItem setRightBarButtonItems:@[self.stepButton, self.continueButton, self.agentButton, self.resetButton]];
+	[self.navigationItem setTitle:GRID_REINFORCEMENT_NAV_ITEM_TITLE];
+	[self.navigationItem setRightBarButtonItems:@[self.stepButton, self.resetButton]];
 }
 
 #pragma mark - Show grid
@@ -96,7 +94,7 @@ using namespace std;
 #pragma mark - Parse grid
 
 - (Grid)parseGrid {
-	NSString *filePath = [[NSBundle mainBundle] pathForResource:GRID_WORLD_GRID_FILE_NAME ofType:@"json"];
+	NSString *filePath = [[NSBundle mainBundle] pathForResource:GRID_GRID_FILE_NAME ofType:@"json"];
 	NSData *data = [NSData dataWithContentsOfFile:filePath];
 	
 	NSError *error;
@@ -202,46 +200,11 @@ using namespace std;
 	}
 }
 
-#pragma mark - Continue button
-
-- (UIBarButtonItem *)continueButton {
-	if (!_continueButton) {
-		_continueButton = [[UIBarButtonItem alloc] initWithTitle:GRID_WORLD_CONTINUE_BUTTON_TITLE
-														   style:UIBarButtonItemStylePlain
-														  target:self
-														  action:@selector(continueButtonTouched)];
-	}
-	
-	return _continueButton;
-}
-
-#pragma mark - Continue button touched
-
-- (void)continueButtonTouched {
-	NSLog(@"continue button touched");
-}
-
-#pragma mark - Agent button
-
-- (UIBarButtonItem *)agentButton {
-	if (!_agentButton) {
-		_agentButton = [[UIBarButtonItem alloc] initWithTitle:GRID_WORLD_AGENT_BUTTON_TITLE style:UIBarButtonItemStylePlain target:self action:@selector(agentButtonTouched)];
-	}
-	
-	return _agentButton;
-}
-
-#pragma mark - Agent button touched
-
-- (void)agentButtonTouched {
-	NSLog(@"agent button touched");
-}
-
 #pragma mark - Step button
 
 - (UIBarButtonItem *)stepButton {
 	if (!_stepButton) {
-		_stepButton = [[UIBarButtonItem alloc] initWithTitle:GRID_WORLD_STEP_BUTTON_TITLE style:UIBarButtonItemStylePlain target:self action:@selector(stepButtonTouched)];
+		_stepButton = [[UIBarButtonItem alloc] initWithTitle:GRID_STEP_BUTTON_TITLE style:UIBarButtonItemStylePlain target:self action:@selector(stepButtonTouched)];
 	}
 	
 	return _stepButton;
@@ -259,7 +222,7 @@ using namespace std;
 
 - (UIBarButtonItem *)resetButton {
 	if (!_resetButton) {
-		_resetButton = [[UIBarButtonItem alloc] initWithTitle:GRID_WORLD_RESET_BUTTON_TITLE style:UIBarButtonItemStylePlain target:self action:@selector(resetButtonTouched)];
+		_resetButton = [[UIBarButtonItem alloc] initWithTitle:GRID_RESET_BUTTON_TITLE style:UIBarButtonItemStylePlain target:self action:@selector(resetButtonTouched)];
 	}
 	
 	return _resetButton;
@@ -279,19 +242,43 @@ using namespace std;
 #pragma mark - Reinforcement learning
 
 - (void)reinforcementLearning {
-	ReinforcementLearningOperation *reinforcementLearningOperation = [[ReinforcementLearningOperation alloc] initWithGrid:mGrid t:mT discountFactor:GRID_WORLD_DISCOUNT_FACTOR blackBox:mBlackBox];
-	
-	reinforcementLearningOperation.reinforcementLearningCompletionBlock = ^(Grid grid, int t) {
-		mGrid = grid;
-		mT = t; 
+	if (_numberOfTrials < GRID_MAX_NUMBER_OF_TRIALS) {
+		int startRow = (rand()%mGrid.numberOfRows());
+		int startCol = (rand()%mGrid.numberOfCols());
 		
-		[self showQValues];
-		[self showPolicies];
+		GridCell startGridCell = mGrid.gridCellForRowAndCol(startRow, startCol);
 		
-		_numberOfTrials++;
-	};
-	
-	[_queue addOperation:reinforcementLearningOperation];
+		while (startGridCell.type() == GridCellType::GridCellTypeWall || startGridCell.type() == GridCellType::GridCellTypeTerminal) {
+			startRow = (rand()%mGrid.numberOfRows());
+			startCol = (rand()%mGrid.numberOfCols());
+			
+			startGridCell = mGrid.gridCellForRowAndCol(startRow, startCol);
+		}
+		
+		mGrid.setAgentRowAndCol(startRow, startCol);
+		
+		ReinforcementLearningOperation *reinforcementLearningOperation = [[ReinforcementLearningOperation alloc] initWithGrid:mGrid t:mT discountFactor:GRID_DISCOUNT_FACTOR maxFrequency:GRID_MAX_FREQUENCY explorationConstant:GRID_EXPLORATION_CONSTANT blackBox:mBlackBox];
+		
+		reinforcementLearningOperation.reinforcementLearningCompletionBlock = ^(Grid grid, int t) {
+			mGrid = grid;
+			mT = t;
+			
+			_numberOfTrials++;
+			
+			if (_numberOfTrials == GRID_MAX_NUMBER_OF_TRIALS) {
+				dispatch_async(dispatch_get_main_queue(), ^{
+					[self showQValues];
+					[self showPolicies];
+				});
+			}
+			
+			else {
+				[self reinforcementLearning];
+			}
+		};
+		
+		[_queue addOperation:reinforcementLearningOperation];
+	}
 }
 
 #pragma mark - Grid view
@@ -354,25 +341,7 @@ using namespace std;
 }
 
 - (double)qValueForDirection:(Direction)direction atRow:(int)row col:(int)col {
-	GridCell cell = mGrid.gridCellForRowAndCol(row, col);
-	
-	double qValue = 0;
-	
-	if (direction == DirectionUp) {
-		qValue = cell.qValueForGridCellDirection(GridCellDirection::GridCellDirectionUp);
-	}
-	
-	else if (direction == DirectionDown) {
-		qValue = cell.qValueForGridCellDirection(GridCellDirection::GridCellDirectionDown);
-	}
-	
-	else if (direction == DirectionLeft) {
-		qValue = cell.qValueForGridCellDirection(GridCellDirection::GridCellDirectionLeft);
-	}
-	
-	else if (direction == DirectionRight) {
-		qValue = cell.qValueForGridCellDirection(GridCellDirection::GridCellDirectionRight);
-	}
+	double qValue = mGrid.qValueForRowColAndDirection(row, col, (GridCellDirection)direction);
 	
 	return qValue;
 }
@@ -392,11 +361,51 @@ using namespace std;
 }
 
 - (int)numberOfQValues {
-	GridCell cell = mGrid.gridCellForRowAndCol(0, 0);
+	return mGrid.numberOfQValuesPerCell();
+}
+
+- (PolicyViewType)shownPolicyViewTypeForRow:(int)row col:(int)col {
+	PolicyViewType maxPolicyViewType;
+	double maxQValue = -DBL_MAX;
+	double qValue = -DBL_MAX;
 	
-	int numberOfQValues = cell.numberOfQValues();
+	qValue = mGrid.qValueForRowColAndDirection(row, col, GridCellDirection::GridCellDirectionUp);
+	maxQValue = qValue;
+	maxPolicyViewType = PolicyViewTypeUp;
 	
-	return numberOfQValues;
+	qValue = mGrid.qValueForRowColAndDirection(row, col, GridCellDirection::GridCellDirectionDown);
+	
+	if (qValue > maxQValue) {
+		maxQValue = qValue;
+		maxPolicyViewType = PolicyViewTypeDown;
+	}
+	
+	qValue = mGrid.qValueForRowColAndDirection(row, col, GridCellDirection::GridCellDirectionLeft);
+	
+	if (qValue > maxQValue) {
+		maxQValue = qValue;
+		maxPolicyViewType = PolicyViewTypeLeft;
+	}
+	
+	qValue = mGrid.qValueForRowColAndDirection(row, col, GridCellDirection::GridCellDirectionRight);
+	
+	if (qValue > maxQValue) {
+		maxPolicyViewType = PolicyViewTypeRight;
+	}
+	
+	return maxPolicyViewType;
+}
+
+- (CGPoint)agentCoordinate {
+	GridCell agentCell = mGrid.agentCell();
+	
+	CGPoint agentCoordinate = CGPointMake(agentCell.coordinate().x, agentCell.coordinate().y);
+	
+	return agentCoordinate;
+}
+
+- (void)setQValueText:(NSString *)text forRow:(int)row col:(int)col direction:(Direction)direction {
+	[self.gridView setQValueText:text forRow:row col:col direction:direction];
 }
 
 - (void)didReceiveMemoryWarning

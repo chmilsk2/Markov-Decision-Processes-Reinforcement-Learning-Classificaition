@@ -22,8 +22,6 @@ BlackBox::~BlackBox() {};
 BlackBoxDirection BlackBox::actionForIntendedAction(BlackBoxDirection intendedAction) {
 	BlackBoxDirection action;
 	
-	srand((unsigned int)time(NULL));
-	
 	int randomNumber = 1 + (rand() % MAX_RANDOM_NUM);
 	
 	BlackBoxDirection unintendedAction1 = BlackBoxDirection::BlackBoxDirectionUp;

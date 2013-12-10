@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0533F5FF185781F40071AC4D /* AgentView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0533F5FE185781F40071AC4D /* AgentView.m */; };
 		0552FD0D1856992300E43199 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0552FD0C1856992300E43199 /* Foundation.framework */; };
 		0552FD0F1856992300E43199 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0552FD0E1856992300E43199 /* CoreGraphics.framework */; };
 		0552FD111856992300E43199 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0552FD101856992300E43199 /* UIKit.framework */; };
@@ -41,6 +42,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0533F5FD185781F40071AC4D /* AgentView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AgentView.h; sourceTree = "<group>"; };
+		0533F5FE185781F40071AC4D /* AgentView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AgentView.m; sourceTree = "<group>"; };
 		0552FD091856992300E43199 /* ReinforcementLearning.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ReinforcementLearning.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0552FD0C1856992300E43199 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		0552FD0E1856992300E43199 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -200,6 +203,8 @@
 				0552FD4818569A2D00E43199 /* GridCellView.m */,
 				0552FD4A18569A3C00E43199 /* TriangleView.h */,
 				0552FD4B18569A3C00E43199 /* TriangleView.m */,
+				0533F5FD185781F40071AC4D /* AgentView.h */,
+				0533F5FE185781F40071AC4D /* AgentView.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -322,6 +327,7 @@
 				0552FD3D1856996000E43199 /* GridViewController.mm in Sources */,
 				0552FD431856998000E43199 /* ReinforcementLearningOperation.mm in Sources */,
 				0552FD46185699E600E43199 /* GridView.m in Sources */,
+				0533F5FF185781F40071AC4D /* AgentView.m in Sources */,
 				0552FD4918569A2D00E43199 /* GridCellView.m in Sources */,
 				0552FD5218569B3A00E43199 /* GridCell.cpp in Sources */,
 				0552FD191856992300E43199 /* main.m in Sources */,

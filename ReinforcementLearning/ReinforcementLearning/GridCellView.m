@@ -79,30 +79,28 @@
 	NSMutableArray *hiddenPolicyViews = [NSMutableArray arrayWithObjects:_policyViewUp, _policyViewDown, _policyViewLeft, _policyViewRight, nil];
 	NSMutableArray *shownPolicyViews = [NSMutableArray array];
 	
-//	if (policyViewType == PolicyViewTypeUp) {
-//		[shownPolicyViews addObject:_policyViewUp];
-//		[hiddenPolicyViews removeObject:_policyViewUp];
-//	}
-//	
-//	else if (policyViewType == PolicyViewTypeDown) {
-//		[shownPolicyViews addObject:_policyViewDown];
-//		[hiddenPolicyViews removeObject:_policyViewDown];
-//	}
-//	
-//	else if (policyViewType == PolicyViewTypeLeft) {
-//		[shownPolicyViews addObject:_policyViewLeft];
-//		[hiddenPolicyViews removeObject:_policyViewLeft];
-//	}
-//	
-//	else if (policyViewType == PolicyViewTypeRight) {
-//		[shownPolicyViews addObject:_policyViewRight];
-//		[hiddenPolicyViews removeObject:_policyViewRight];
-//	}
+	if (policyViewType == PolicyViewTypeUp) {
+		[shownPolicyViews addObject:_policyViewUp];
+		[hiddenPolicyViews removeObject:_policyViewUp];
+	}
 	
-//	[self showPolicyViews:shownPolicyViews];
-//	[self hidePolicyViews:hiddenPolicyViews];
+	else if (policyViewType == PolicyViewTypeDown) {
+		[shownPolicyViews addObject:_policyViewDown];
+		[hiddenPolicyViews removeObject:_policyViewDown];
+	}
 	
-	[self showPolicyViews:hiddenPolicyViews];
+	else if (policyViewType == PolicyViewTypeLeft) {
+		[shownPolicyViews addObject:_policyViewLeft];
+		[hiddenPolicyViews removeObject:_policyViewLeft];
+	}
+	
+	else if (policyViewType == PolicyViewTypeRight) {
+		[shownPolicyViews addObject:_policyViewRight];
+		[hiddenPolicyViews removeObject:_policyViewRight];
+	}
+	
+	[self showPolicyViews:shownPolicyViews];
+	[self hidePolicyViews:hiddenPolicyViews];
 }
 
 #pragma mark - Show policy view types
@@ -194,7 +192,6 @@
 	}
 	
 	[qLabel setText:text];
-
 }
 
 - (void)layoutSubviews {

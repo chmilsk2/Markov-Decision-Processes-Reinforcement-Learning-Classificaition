@@ -22,6 +22,9 @@
 	
 	[self.window setRootViewController:navController];
 	
+	// random number seed
+	srand((unsigned int)time(NULL));
+	
     [self.window makeKeyAndVisible];
     return YES;
 }

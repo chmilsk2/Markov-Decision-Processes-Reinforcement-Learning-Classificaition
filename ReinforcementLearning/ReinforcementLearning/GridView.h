@@ -28,6 +28,7 @@ typedef NS_ENUM(NSUInteger, GridCellViewType) {
 - (double)qValueForDirection:(Direction)direction atRow:(int)row col:(int)col;
 - (PolicyViewType)shownPolicyViewTypeForRow:(int)row col:(int)col;
 - (BOOL)isDiscoveredForRow:(int)row col:(int)col;
+- (CGPoint)agentCoordinate;
 
 @end
 
@@ -38,5 +39,7 @@ typedef NS_ENUM(NSUInteger, GridCellViewType) {
 - (void)addCellViews;
 - (void)showQValues;
 - (void)showPolicies;
+- (void)setQValueText:(NSString *)qValueText forRow:(int)row col:(int)col direction:(Direction)direction;
+- (void)moveAgentToRow:(int)row col:(int)col;
 
 @end
