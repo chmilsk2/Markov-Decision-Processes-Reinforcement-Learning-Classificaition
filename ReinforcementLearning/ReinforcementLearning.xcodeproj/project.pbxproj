@@ -27,6 +27,7 @@
 		0552FD4F18569B2900E43199 /* Grid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0552FD4D18569B2900E43199 /* Grid.cpp */; };
 		0552FD5218569B3A00E43199 /* GridCell.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0552FD5018569B3A00E43199 /* GridCell.cpp */; };
 		0552FD5518569CD700E43199 /* Assignment4GridWorld1.json in Resources */ = {isa = PBXBuildFile; fileRef = 0552FD5418569CD700E43199 /* Assignment4GridWorld1.json */; };
+		0552FD5B1856C31900E43199 /* BlackBox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0552FD591856C31900E43199 /* BlackBox.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -72,6 +73,8 @@
 		0552FD5118569B3A00E43199 /* GridCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GridCell.h; sourceTree = "<group>"; };
 		0552FD5418569CD700E43199 /* Assignment4GridWorld1.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Assignment4GridWorld1.json; sourceTree = "<group>"; };
 		0552FD561856B2A400E43199 /* Direction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Direction.h; sourceTree = "<group>"; };
+		0552FD591856C31900E43199 /* BlackBox.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BlackBox.cpp; sourceTree = "<group>"; };
+		0552FD5A1856C31900E43199 /* BlackBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BlackBox.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -181,6 +184,8 @@
 				0552FD4D18569B2900E43199 /* Grid.cpp */,
 				0552FD5118569B3A00E43199 /* GridCell.h */,
 				0552FD5018569B3A00E43199 /* GridCell.cpp */,
+				0552FD5A1856C31900E43199 /* BlackBox.h */,
+				0552FD591856C31900E43199 /* BlackBox.cpp */,
 				0552FD561856B2A400E43199 /* Direction.h */,
 			);
 			name = Model;
@@ -321,6 +326,7 @@
 				0552FD5218569B3A00E43199 /* GridCell.cpp in Sources */,
 				0552FD191856992300E43199 /* main.m in Sources */,
 				0552FD4F18569B2900E43199 /* Grid.cpp in Sources */,
+				0552FD5B1856C31900E43199 /* BlackBox.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -42,10 +42,6 @@
  
  uPrime(s) = reward(s) + discountFactor * max(P(s'|s,a)*uPrime(s'))
  
- @param intendedOutcomeProbability probability of heading in the intended direction
- @param unintendedOutcomeProbability probability of heading in the unintended direction, right angle to intended direction in this case
- @param discountFactor discount factor
- @param u vector for utility of state in s, initialized to 0
  */
 
 - (void)valueIteration {

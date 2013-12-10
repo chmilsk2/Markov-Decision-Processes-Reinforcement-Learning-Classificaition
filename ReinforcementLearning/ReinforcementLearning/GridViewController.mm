@@ -16,6 +16,7 @@
 
 using namespace std;
 
+#define GRID_WORLD_MAX_NUMBER_OF_TRIALS 1
 #define GRID_WORLD_DISCOUNT_FACTOR .99
 #define GRID_WORLD_INTENDED_OUTCOME_PROBABILITIY .80
 #define GRID_WORLD_UNINTENDED_OUTCOME_PROBABILITIY .10
@@ -28,12 +29,15 @@ using namespace std;
 
 @implementation GridViewController {
 	Grid mGrid;
+	BlackBox mBlackBox;
+	int mT;
 	GridView *_gridView;
 	UIBarButtonItem *_agentButton;
 	UIBarButtonItem *_stepButton;
 	UIBarButtonItem *_continueButton;
 	UIBarButtonItem *_resetButton;
 	NSOperationQueue *_queue;
+	NSUInteger _numberOfTrials;
 }
 
 - (id)init
@@ -41,8 +45,11 @@ using namespace std;
     self = [super init];
 	
     if (self) {
+		mBlackBox = BlackBox(GRID_WORLD_INTENDED_OUTCOME_PROBABILITIY, GRID_WORLD_UNINTENDED_OUTCOME_PROBABILITIY);
         _queue = [[NSOperationQueue alloc] init];
 		[_queue setMaxConcurrentOperationCount:1];
+		_numberOfTrials = 0;
+		mT = 0;
     }
 	
     return self;
@@ -103,6 +110,9 @@ using namespace std;
 		
 		vector<GridCell> cells;
 		
+		int startStateRow = 0;
+		int startStateCol = 0;
+		
 		for (NSDictionary *feature in features) {
 			NSString *type = [feature objectForKey:@"type"];
 			
@@ -114,6 +124,8 @@ using namespace std;
 			vector<GridCell> newCells;
 			
 			GridCellType gridCellType;
+			
+			BOOL isStartState = NO;
 			
 			id coordinates = [feature objectForKey:@"coordinates"];
 			id coordinatesAndRewards = [feature objectForKey:@"coordinatesAndRewards"];
@@ -133,6 +145,7 @@ using namespace std;
 			else if ([type isEqualToString:start]) {
 				gridCellType = GridCellType::GridCellTypeStart;
 				newCoordinates = coordinatesAndRewards;
+				isStartState = YES;
 			}
 			
 			else if ([type isEqualToString:terminal]) {
@@ -164,6 +177,11 @@ using namespace std;
 					index++;
 				}
 				
+				if (isStartState) {
+					startStateRow = point.x;
+					startStateCol = point.y;
+				}
+				
 				GridCell newCell(gridCellType, point, reward);
 				newCells.push_back(newCell);
 			}
@@ -173,7 +191,7 @@ using namespace std;
 			}
 		}
 		
-		return Grid(numberOfRows.intValue, numberOfCols.intValue, cells);
+		return Grid(numberOfRows.intValue, numberOfCols.intValue, cells, startStateRow, startStateCol);
 	}
 	
 	else {
@@ -261,14 +279,19 @@ using namespace std;
 #pragma mark - Reinforcement learning
 
 - (void)reinforcementLearning {
-	ReinforcementLearningOperation *reinforcementLearningOperation = [[ReinforcementLearningOperation alloc] initWithGrid:mGrid];
+	ReinforcementLearningOperation *reinforcementLearningOperation = [[ReinforcementLearningOperation alloc] initWithGrid:mGrid t:mT discountFactor:GRID_WORLD_DISCOUNT_FACTOR blackBox:mBlackBox];
 	
-	reinforcementLearningOperation.reinforcementLearningCompletionBlock = ^(Grid grid) {
+	reinforcementLearningOperation.reinforcementLearningCompletionBlock = ^(Grid grid, int t) {
 		mGrid = grid;
+		mT = t; 
 		
 		[self showQValues];
 		[self showPolicies];
+		
+		_numberOfTrials++;
 	};
+	
+	[_queue addOperation:reinforcementLearningOperation];
 }
 
 #pragma mark - Grid view

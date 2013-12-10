@@ -19,10 +19,12 @@ class Grid {
 	int mNumberOfRows;
 	int mNumberOfCols;
 	vector<GridCell> mGridCells;
+	int mStartCellRow;
+	int mStartCellCol;
 	
 public:
 	Grid();
-	Grid(int numberOfRows, int numberOfCols, vector<GridCell> gridCells);
+	Grid(int numberOfRows, int numberOfCols, vector<GridCell> gridCells, int startStateRow, int startStateCol);
 	~Grid();
 	
 	// number of rows
@@ -33,6 +35,11 @@ public:
 	
 	// cell for row, col
 	GridCell & gridCellForRowAndCol(int row, int col);
+	
+	// start cell
+	GridCell & startCell();
+	
+	void setStartCellRowAndCol(int row, int col);
 	
 	// sort in row major order
 	void sort();

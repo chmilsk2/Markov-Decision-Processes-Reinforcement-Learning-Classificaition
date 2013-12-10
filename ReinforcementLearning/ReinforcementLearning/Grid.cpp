@@ -11,9 +11,11 @@
 Grid::Grid() {
 	mNumberOfCols = 0;
 	mNumberOfRows = 0;
+	mStartCellCol = 0;
+	mStartCellRow = 0;
 }
 
-Grid::Grid(int numberOfRows, int numberOfCols, vector<GridCell> gridCells):mNumberOfRows(numberOfRows), mNumberOfCols(numberOfCols), mGridCells(gridCells) {};
+Grid::Grid(int numberOfRows, int numberOfCols, vector<GridCell> gridCells, int startStateRow, int startStateCol):mNumberOfRows(numberOfRows), mNumberOfCols(numberOfCols), mGridCells(gridCells), mStartCellRow(startStateRow), mStartCellCol(startStateCol) {};
 
 Grid::~Grid() {};
 
@@ -27,6 +29,15 @@ int Grid::numberOfCols() {
 
 GridCell & Grid::gridCellForRowAndCol(int row, int col) {
 	return mGridCells[row*mNumberOfCols + col];
+}
+
+GridCell & Grid::startCell() {
+	return mGridCells[mStartCellRow*mNumberOfCols + mStartCellCol];
+}
+
+void Grid::setStartCellRowAndCol(int row, int col) {
+	mStartCellRow = row;
+	mStartCellCol = col;
 }
 
 void Grid::sort() {

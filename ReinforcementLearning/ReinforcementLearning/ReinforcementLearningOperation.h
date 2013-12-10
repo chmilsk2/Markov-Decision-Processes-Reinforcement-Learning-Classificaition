@@ -8,12 +8,13 @@
 
 #import <UIKit/UIKit.h>
 #import "Grid.h"
+#import "BlackBox.h"
 
-typedef void(^ReinforcementLearningHandler)(Grid grid);
+typedef void(^ReinforcementLearningHandler)(Grid grid, int t);
 
-@interface ReinforcementLearningOperation : UIViewController
+@interface ReinforcementLearningOperation : NSOperation
 
-- (id)initWithGrid:(Grid)grid;
+- (id)initWithGrid:(Grid)grid t:(int)t discountFactor:(double)discountFactor blackBox:(BlackBox)blackBox;
 
 @property (copy) ReinforcementLearningHandler reinforcementLearningCompletionBlock;
 

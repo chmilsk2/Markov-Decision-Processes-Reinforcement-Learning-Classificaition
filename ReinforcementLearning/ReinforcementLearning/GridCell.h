@@ -38,7 +38,9 @@ class GridCell {
 	GridCellType mType;
 	Coordinate mCoordinate;
 	vector<double> mQValues;
+	int mFrequency;
 	double mReward;
+	GridCellDirection mPolicy;
 	
 	
 public:
@@ -58,8 +60,17 @@ public:
 	// reward
 	double reward();
 	
+	// frequency
+	int frequency();
+	
+	// increment frequency
+	void incrementFrequency();
+	
 	// q value
 	double qValueForGridCellDirection(GridCellDirection gridCellDirection);
+	
+	// policy
+	GridCellDirection policy();
 	
 	// print
 	void print();
