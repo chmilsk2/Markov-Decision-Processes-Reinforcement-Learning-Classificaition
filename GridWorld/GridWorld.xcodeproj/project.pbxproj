@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		0552FCE718553F8F00E43199 /* TriangleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0552FCE618553F8F00E43199 /* TriangleView.m */; };
-		0552FCEA1855A03800E43199 /* MenuButtonViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0552FCE91855A03800E43199 /* MenuButtonViewController.m */; };
 		05951C1918538BDC00A84329 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05951C1818538BDC00A84329 /* Foundation.framework */; };
 		05951C1B18538BDC00A84329 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05951C1A18538BDC00A84329 /* CoreGraphics.framework */; };
 		05951C1D18538BDC00A84329 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05951C1C18538BDC00A84329 /* UIKit.framework */; };
@@ -43,8 +42,6 @@
 /* Begin PBXFileReference section */
 		0552FCE518553F8F00E43199 /* TriangleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TriangleView.h; sourceTree = "<group>"; };
 		0552FCE618553F8F00E43199 /* TriangleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TriangleView.m; sourceTree = "<group>"; };
-		0552FCE81855A03800E43199 /* MenuButtonViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuButtonViewController.h; sourceTree = "<group>"; };
-		0552FCE91855A03800E43199 /* MenuButtonViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MenuButtonViewController.m; sourceTree = "<group>"; };
 		05951C1518538BDC00A84329 /* GridWorld.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GridWorld.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		05951C1818538BDC00A84329 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		05951C1A18538BDC00A84329 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -213,8 +210,6 @@
 			children = (
 				05951C4D18538C5F00A84329 /* GridViewController.h */,
 				05951C4E18538C5F00A84329 /* GridViewController.mm */,
-				0552FCE81855A03800E43199 /* MenuButtonViewController.h */,
-				0552FCE91855A03800E43199 /* MenuButtonViewController.m */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -324,7 +319,6 @@
 				05951C5F1853B7CE00A84329 /* GridCellView.m in Sources */,
 				05951C681853D1B200A84329 /* GridCell.cpp in Sources */,
 				05951C651853D14E00A84329 /* Grid.cpp in Sources */,
-				0552FCEA1855A03800E43199 /* MenuButtonViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
