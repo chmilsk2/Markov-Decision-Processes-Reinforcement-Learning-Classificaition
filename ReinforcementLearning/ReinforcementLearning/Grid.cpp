@@ -7,6 +7,7 @@
 //
 
 #include "Grid.h"
+#include "float.h"
 
 #define NUMBER_OF_Q_VALUES_PER_CELL 4
 
@@ -49,6 +50,57 @@ Grid::Grid(int numberOfRows, int numberOfCols, vector<GridCell> gridCells, int s
 };
 
 Grid::~Grid() {};
+
+#pragma mark - Utilities
+
+vector<double> Grid::utilities() {
+	vector<double> utilities;
+	
+	for (int row = 1; row < numberOfRows() - 1; row++) {
+		for (int col = 1; col < numberOfCols() - 1; col++) {
+			double qValue = 0;
+			double maxQValue = -DBL_MAX;
+			
+			for (int i = 0; i < NUMBER_OF_Q_VALUES_PER_CELL; i++) {
+				if (i == 0) {
+					qValue = qValueForRowColAndDirection(row, col, GridCellDirection::GridCellDirectionUp);
+					
+					if (qValue > maxQValue) {
+						maxQValue = qValue;
+					}
+				}
+				 
+				else if (i == 1) {
+					qValue = qValueForRowColAndDirection(row, col, GridCellDirection::GridCellDirectionDown);
+					
+					if (qValue > maxQValue) {
+						maxQValue = qValue;
+					}
+				}
+				
+				else if (i == 2) {
+					qValue = qValueForRowColAndDirection(row, col, GridCellDirection::GridCellDirectionLeft);
+					
+					if (qValue > maxQValue) {
+						maxQValue = qValue;
+					}
+				}
+				
+				else if (i == 3) {
+					qValue = qValueForRowColAndDirection(row, col, GridCellDirection::GridCellDirectionRight);
+					
+					if (qValue > maxQValue) {
+						maxQValue = qValue;
+					}
+				}
+			}
+			
+			utilities.push_back(maxQValue);
+		}
+	}
+	
+	return utilities;
+}
 
 int Grid::numberOfRows() {
 	return mNumberOfRows;

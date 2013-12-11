@@ -16,8 +16,8 @@
 
 using namespace std;
 
-#define GRID_MAX_NUMBER_OF_TRIALS 10
-#define GRID_MAX_FREQUENCY 1
+#define GRID_MAX_NUMBER_OF_TRIALS 100000
+#define GRID_MAX_FREQUENCY 1000
 #define GRID_EXPLORATION_CONSTANT 30
 #define GRID_DISCOUNT_FACTOR .99
 #define GRID_INTENDED_OUTCOME_PROBABILITIY .80
@@ -25,7 +25,7 @@ using namespace std;
 #define GRID_REINFORCEMENT_NAV_ITEM_TITLE @"Reinforcement Learning"
 #define GRID_STEP_BUTTON_TITLE @"Step"
 #define GRID_RESET_BUTTON_TITLE @"Reset"
-#define GRID_GRID_FILE_NAME @"Assignment4GridWorld1"
+#define GRID_GRID_FILE_NAME @"Assignment4GridReward10"
 
 @implementation GridViewController {
 	Grid mGrid;
@@ -262,11 +262,19 @@ using namespace std;
 		reinforcementLearningOperation.reinforcementLearningCompletionBlock = ^(Grid grid, int t) {
 			mGrid = grid;
 			mT = t;
-			
 			_numberOfTrials++;
+			
 			
 			if (_numberOfTrials == GRID_MAX_NUMBER_OF_TRIALS) {
 				dispatch_async(dispatch_get_main_queue(), ^{
+					vector<double> utilities = mGrid.utilities();
+					
+					for (auto it : utilities) {
+						cout << it << ", ";
+					}
+					
+					cout << endl;
+					
 					[self showQValues];
 					[self showPolicies];
 				});

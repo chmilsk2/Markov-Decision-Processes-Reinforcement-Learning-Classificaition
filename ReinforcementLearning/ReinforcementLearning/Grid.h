@@ -24,6 +24,7 @@ class Grid {
 	int mStartCellCol;
 	map<int, int> mFrequencyMap;
 	map<int, double> mQValueMap;
+	map<int, vector<double>> mUtilityMap;
 	int mNumberOfQValues;
 	int mAgentRow;
 	int mAgentCol;
@@ -32,6 +33,9 @@ public:
 	Grid();
 	Grid(int numberOfRows, int numberOfCols, vector<GridCell> gridCells, int startStateRow, int startStateCol);
 	~Grid();
+	
+	// utilities
+	vector<double> utilities(); 
 	
 	// number of rows
 	int numberOfRows();

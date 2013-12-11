@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0533F63C18580EF20071AC4D /* Assignment4GridReward10.json in Resources */ = {isa = PBXBuildFile; fileRef = 0533F63B18580EF20071AC4D /* Assignment4GridReward10.json */; };
 		0552FCE718553F8F00E43199 /* TriangleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0552FCE618553F8F00E43199 /* TriangleView.m */; };
 		05951C1918538BDC00A84329 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05951C1818538BDC00A84329 /* Foundation.framework */; };
 		05951C1B18538BDC00A84329 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05951C1A18538BDC00A84329 /* CoreGraphics.framework */; };
@@ -40,6 +41,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0533F63B18580EF20071AC4D /* Assignment4GridReward10.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Assignment4GridReward10.json; sourceTree = "<group>"; };
 		0552FCE518553F8F00E43199 /* TriangleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TriangleView.h; sourceTree = "<group>"; };
 		0552FCE618553F8F00E43199 /* TriangleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TriangleView.m; sourceTree = "<group>"; };
 		05951C1518538BDC00A84329 /* GridWorld.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GridWorld.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -175,6 +177,7 @@
 			isa = PBXGroup;
 			children = (
 				05951C581853A0B200A84329 /* Assignment4GridWorld1.json */,
+				0533F63B18580EF20071AC4D /* Assignment4GridReward10.json */,
 			);
 			name = Grids;
 			sourceTree = "<group>";
@@ -290,6 +293,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				05951C2318538BDC00A84329 /* InfoPlist.strings in Resources */,
+				0533F63C18580EF20071AC4D /* Assignment4GridReward10.json in Resources */,
 				05951C2B18538BDC00A84329 /* Images.xcassets in Resources */,
 				05951C591853A0B200A84329 /* Assignment4GridWorld1.json in Resources */,
 			);

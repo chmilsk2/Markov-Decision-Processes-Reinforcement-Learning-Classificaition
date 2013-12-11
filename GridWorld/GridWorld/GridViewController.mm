@@ -24,7 +24,7 @@ using namespace std;
 #define GRID_WORLD_AGENT_BUTTON_TITLE @"Agent"
 #define GRID_WORLD_STEP_BUTTON_TITLE @"Step"
 #define GRID_WORLD_RESET_BUTTON_TITLE @"Reset"
-#define GRID_WORLD_GRID_FILE_NAME @"Assignment4GridWorld1"
+#define GRID_WORLD_GRID_FILE_NAME @"Assignment4GridReward10"
 
 @implementation GridViewController {
 	Grid mGrid;
@@ -282,6 +282,18 @@ using namespace std;
 		
 		[self showUtilities];
 		[self showPolicies];
+		
+		for (NSUInteger row = 1; row < mGrid.numberOfRows() - 1; row++) {
+			for (NSUInteger col = 1; col < mGrid.numberOfCols() - 1; col++) {
+				GridCell cell = mGrid.gridCellForRowAndCol((int)row, (int)col);
+				
+				if (cell.utility() != 0 && cell.utility() != 1 && cell.utility() != -1) {
+					cout << cell.utility() << ", ";
+				}
+			}
+		}
+		
+		cout << endl;
 	};
 	
 	[_queue addOperation:valueIterationOperation];

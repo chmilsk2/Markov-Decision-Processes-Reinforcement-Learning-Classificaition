@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0533F5FF185781F40071AC4D /* AgentView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0533F5FE185781F40071AC4D /* AgentView.m */; };
+		0533F63E18580FE60071AC4D /* Assignment4GridReward10.json in Resources */ = {isa = PBXBuildFile; fileRef = 0533F63D18580FE50071AC4D /* Assignment4GridReward10.json */; };
 		0552FD0D1856992300E43199 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0552FD0C1856992300E43199 /* Foundation.framework */; };
 		0552FD0F1856992300E43199 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0552FD0E1856992300E43199 /* CoreGraphics.framework */; };
 		0552FD111856992300E43199 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0552FD101856992300E43199 /* UIKit.framework */; };
@@ -44,6 +45,7 @@
 /* Begin PBXFileReference section */
 		0533F5FD185781F40071AC4D /* AgentView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AgentView.h; sourceTree = "<group>"; };
 		0533F5FE185781F40071AC4D /* AgentView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AgentView.m; sourceTree = "<group>"; };
+		0533F63D18580FE50071AC4D /* Assignment4GridReward10.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Assignment4GridReward10.json; sourceTree = "<group>"; };
 		0552FD091856992300E43199 /* ReinforcementLearning.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ReinforcementLearning.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0552FD0C1856992300E43199 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		0552FD0E1856992300E43199 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -222,6 +224,7 @@
 			isa = PBXGroup;
 			children = (
 				0552FD5418569CD700E43199 /* Assignment4GridWorld1.json */,
+				0533F63D18580FE50071AC4D /* Assignment4GridReward10.json */,
 			);
 			name = Grids;
 			sourceTree = "<group>";
@@ -302,6 +305,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0552FD171856992300E43199 /* InfoPlist.strings in Resources */,
+				0533F63E18580FE60071AC4D /* Assignment4GridReward10.json in Resources */,
 				0552FD1F1856992300E43199 /* Images.xcassets in Resources */,
 				0552FD5518569CD700E43199 /* Assignment4GridWorld1.json in Resources */,
 			);
