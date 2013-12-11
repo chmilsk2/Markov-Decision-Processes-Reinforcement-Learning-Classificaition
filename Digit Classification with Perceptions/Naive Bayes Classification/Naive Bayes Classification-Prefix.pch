@@ -1,0 +1,22 @@
+//
+//  Prefix header
+//
+//  The contents of this file are implicitly included at the beginning of every source file.
+//
+
+#import <Availability.h>
+
+#ifndef __IPHONE_3_0
+#warning "This project uses features only available in iOS SDK 3.0 and later."
+#endif
+
+#ifdef __OBJC__
+	#import <UIKit/UIKit.h>
+	#import <Foundation/Foundation.h>
+#endif
+
+#define DIGIT_SIZE 28
+#define NUMBER_OF_COLOR_COMPONENTS 4
+#define NUMBER_OF_BITS_PER_COMPONENT 8
+#define DIGIT_SIZE_MULTIPLIER 1
+#define NUMBER_OF_DIGIT_CLASSES 10
