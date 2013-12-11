@@ -15,6 +15,33 @@ DigitSet::DigitSet() {}
 
 DigitSet::~DigitSet() {}
 
+double DigitSet::epoch() {
+	return mEpoch;
+}
+
+void DigitSet::setEpoch(double epoch) {
+	mEpoch = epoch;
+}
+
+void DigitSet::zeroOutWeightVectors() {
+	for (int digitClass = 0; digitClass < NUMBER_OF_DIGIT_CLASSES; digitClass++) {
+		for (int row = 0; row < DIGIT_SIZE; row++) {
+			for (int col = 0; col < DIGIT_SIZE; col++) {
+				mWeightVector[digitClass][row][col] = 0;
+			}
+		}
+	}
+}
+
+double DigitSet::weightForIndexRowAndCol(int index, int row, int col) {
+	return mWeightVector[index][row][col];
+}
+
+
+void DigitSet::setWeightForIndexRowAndCol(int index, int row, int col, double weight) {
+	mWeightVector[index][row][col] = weight;
+}
+
 void DigitSet::setBitShiftSizeUsingDigitSize(int digitSize) {
 	// compute the number of bits necessary to represent the digitSize
 	int bitShiftSize = 0;

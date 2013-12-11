@@ -33,6 +33,9 @@ class Digit {
 		Digit();
 		~Digit();
 	
+		// feature weight
+		int featureWeight(int row, int col);
+	
 		// image buffer
 		unsigned char *imageBuffer();
 		void setImageBufferRGBForRowCol(int r, int g, int b, int row, int col);

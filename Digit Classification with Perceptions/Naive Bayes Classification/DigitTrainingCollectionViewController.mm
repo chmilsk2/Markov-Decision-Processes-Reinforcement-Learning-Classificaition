@@ -15,6 +15,7 @@
 #import "QueuePool.h"
 #import "ImageMaker.h"
 
+#define MAX_NUMBER_OF_EPOCHS 10
 #define TRAINING_CELL_SIZE_MULTIPLIER 2
 #define DIGIT_TRAINING_NAVIGATION_ITEM_TITLE @"Training"
 #define TRAIN_BUTTON_TITLE @"Train"
@@ -115,6 +116,7 @@
 
 - (void)setUpDigitSet {
 	mDigitSet.setBitShiftSizeUsingDigitSize(DIGIT_SIZE);
+	mDigitSet.zeroOutWeightVectors();
 }
 
 - (void)parseDigits {
@@ -146,20 +148,35 @@
 #pragma mark - Train Button Touched
 
 - (void)trainButtonTouched {
-	NSLog(@"Train button touched");
+	NSLog(@"train button touched");
+	[self training];
+}
+
+- (void)training {
+	double epoch = mDigitSet.epoch();
 	
-	DigitTrainingOperation *digitTrainingOperation = [[DigitTrainingOperation alloc] initWithDigitSet:mDigitSet];
-	[digitTrainingOperation setDelegate:self];
+	if (epoch < MAX_NUMBER_OF_EPOCHS) {
+		DigitTrainingOperation *digitTrainingOperation = [[DigitTrainingOperation alloc] initWithDigitSet:mDigitSet];
+		[digitTrainingOperation setDelegate:self];
+		
+		digitTrainingOperation.digitTrainingOperationCompletionBlock = ^(DigitSet & trainedDigitSet) {
+			NSLog(@"finished training");
+			
+			mDigitSet = trainedDigitSet;
+			
+			double epoch = mDigitSet.epoch();
+			epoch++;
+			mDigitSet.setEpoch(epoch);
+			
+			[self training];
+		};
+		
+		[[QueuePool sharedQueuePool].queue addOperation:digitTrainingOperation];
+	}
 	
-	digitTrainingOperation.digitTrainingOperationCompletionBlock = ^(DigitSet trainedDigitSet) {
+	else {
 		NSLog(@"finished training");
-		
-		mDigitSet = trainedDigitSet;
-		
-		[self didFinishUpdatingProgressView];
-	};
-	
-	[[QueuePool sharedQueuePool].queue addOperation:digitTrainingOperation];
+	}
 }
 
 #pragma mark - Test Button

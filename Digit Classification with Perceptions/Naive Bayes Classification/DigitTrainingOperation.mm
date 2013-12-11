@@ -7,17 +7,18 @@
 //
 
 #import "DigitTrainingOperation.h"
+#include <algorithm>
 
 #define SMOOTHING_CONSTANT 1
 #define NUMBER_OF_POSSIBLE_VALUES_PER_FEATURE 2
-
+#define ALPHA_VALUE_DECAY 1
 
 @implementation DigitTrainingOperation {
 	DigitSet mDigitSet;
 }
 
 - (void)main {
-	[self train];
+	[self weightTraining];
 	
 	[self didFinishTraining];
 }
@@ -32,7 +33,98 @@
 	return self;
 }
 
-- (void)train {
+- (void)weightTraining {
+	// pass through all the digits, update the weights as you go if incorrectly classified
+	// compute all of the dot products and find the highest dot product
+	int numberOfDigits = (int)mDigitSet.digits.size();
+	
+	int randomIndices[numberOfDigits];
+	
+	for (int i = 0; i < numberOfDigits; i++) {
+		randomIndices[i] = i;
+	}
+	
+	// randomly sort
+	random_shuffle(&randomIndices[0], &randomIndices[numberOfDigits - 1]);
+	
+	for (int i = 0; i < numberOfDigits; i++) {
+		int randomIndex = randomIndices[i];
+		Digit digit = mDigitSet.digits[i];
+		
+		double maxDotProduct = -DBL_MAX;
+		int estimateClassIndex = 0;
+		
+		// loop through all the digit classes to compute the weight values
+		for (int digitIndex = 0; digitIndex < NUMBER_OF_DIGIT_CLASSES; digitIndex++) {
+			double dotProduct = 0;
+			
+			for (int row = 0; row < DIGIT_SIZE; row++) {
+				for (int col = 0; col < DIGIT_SIZE; col++) {
+					double featureWeight = digit.featureWeight(row, col);
+					double weight = mDigitSet.weightForIndexRowAndCol(digitIndex, row, col);
+					
+					dotProduct += weight*featureWeight;
+				}
+			}
+			
+			// figure out the max dot
+			if (dotProduct > maxDotProduct) {
+				maxDotProduct = dotProduct;
+				estimateClassIndex = digitIndex;
+			}
+		}
+		
+		// check to see if digit index is equal to the actual class index provided by the training data
+		int correctClassIndex = digit.digitClass();
+		
+		[self updateRuleForDigit:digit correctClassIndex:correctClassIndex estimateClassIndex:estimateClassIndex];
+	}
+}
+
+- (void)updateRuleForDigit:(Digit)digit correctClassIndex:(int)correctClassIndex estimateClassIndex:(int)estimateClassIndex {
+	BOOL isEstimateCorrect = NO;
+	
+	if (estimateClassIndex == correctClassIndex) {
+		isEstimateCorrect = YES;
+	}
+	
+	for (int row = 0; row < DIGIT_SIZE; row++) {
+		for (int col = 0; col < DIGIT_SIZE; col++) {
+			double featureWeight = digit.featureWeight(row, col);
+			
+			double alpha = [self alpha];
+			
+			if (!isEstimateCorrect) {
+				// incorrectly classfied
+				
+				// update the weight values of the actual class
+				// wc = wc + alpha*x
+				double wc = mDigitSet.weightForIndexRowAndCol(correctClassIndex, row, col);
+				wc += alpha*featureWeight;
+				mDigitSet.setWeightForIndexRowAndCol(correctClassIndex, row, col, wc);
+				
+				// update teh weight values of the incorrectly identified class
+				// wc = wc - alpha*x
+				double wcPrime = mDigitSet.weightForIndexRowAndCol(estimateClassIndex, row, col);
+				wcPrime -= alpha*featureWeight;
+				mDigitSet.setWeightForIndexRowAndCol(estimateClassIndex, row, col, wcPrime);
+			}
+		}
+	}
+}
+
+- (double)alpha {
+	double alpha = 1;
+	
+	if (ALPHA_VALUE_DECAY) {
+		double epoch = mDigitSet.epoch();
+		alpha = 1000.0/(1000.0 + epoch);
+	}
+	
+	return alpha;
+}
+
+- (void)bayesTraining {
 	cout << "training" << endl;
 	
 	if ([self.delegate respondsToSelector:@selector(showProgressView)]) {

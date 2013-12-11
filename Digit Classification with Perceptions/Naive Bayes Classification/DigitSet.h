@@ -18,10 +18,25 @@ using namespace std;
 
 class DigitSet {
 	int mBitShiftSize;
+	int mEpoch = 0;
+	double mWeightVector[NUMBER_OF_DIGIT_CLASSES][DIGIT_SIZE][DIGIT_SIZE];
 	
 	public:
 		DigitSet();
 		~DigitSet();
+	
+		// epoch
+		double epoch();
+	
+		void setEpoch(double epoch);
+	
+		// zero out weight vectors
+		void zeroOutWeightVectors();
+	
+		// set weights
+		double weightForIndexRowAndCol(int index, int row, int col);
+	
+		void setWeightForIndexRowAndCol(int index, int row, int col, double weight);
 	
 		// class frequency
 		int frequencyForClassIndex(int classIndex);
@@ -49,6 +64,7 @@ class DigitSet {
 		void printPrototypicalMaximumAPosterioriDigitIndexMap();
 		void printPrototypicalMaximumLikelihoodDigitIndexMap();
 	
+		// digit label
 		vector<int> digitLabels;
 	
 		// need digit vector to display digits in the the collection view

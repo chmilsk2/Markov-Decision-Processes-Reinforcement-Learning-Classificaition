@@ -9,13 +9,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Naive Bayes Classification/DigitTestingOperation.mm"
-            timestampString = "406770758.245336"
+            filePath = "Naive Bayes Classification/DigitTrainingCollectionViewController.mm"
+            timestampString = "408436577.562713"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "96"
-            endingLineNumber = "96"
-            landmarkName = "-test"
+            startingLineNumber = "178"
+            endingLineNumber = "178"
+            landmarkName = "-training"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

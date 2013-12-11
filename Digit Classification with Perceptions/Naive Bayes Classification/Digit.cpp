@@ -51,6 +51,20 @@ void Digit::setImageBufferRGBForRowCol(int r, int g, int b, int row, int col) {
 	}
 }
 
+#pragma mark - Feature weight
+
+int Digit::featureWeight(int row, int col) {
+	int featureWeight = 0;
+	
+	char pixelChar = pixelValue(row, col);
+	
+	if (pixelChar == '+' || pixelChar == '#') {
+		featureWeight = 1;
+	}
+	
+	return featureWeight;
+}
+
 #pragma mark - Digit Class
 
 int Digit::digitClass() {

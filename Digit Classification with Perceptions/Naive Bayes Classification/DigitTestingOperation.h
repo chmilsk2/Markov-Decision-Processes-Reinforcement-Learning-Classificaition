@@ -11,7 +11,7 @@
 #include "DigitSet.h"
 #include "DigitClassificaitonRule.h"
 
-typedef void(^DigitTestingOperationHandler)(DigitSet testedDigitSet);
+typedef void(^DigitTestingOperationHandler)(DigitSet & testedDigitSet);
 
 @interface DigitTestingOperation : NSOperation
 

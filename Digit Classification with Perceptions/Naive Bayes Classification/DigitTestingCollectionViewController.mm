@@ -196,14 +196,14 @@
 	DigitTestingOperation *digitTestingOperation = [[DigitTestingOperation alloc] initWithTestDigitSet:mTestingDigitSet trainingDigitSet:mTrainingDigitSet classificationRule:_classificationRule];
 	[digitTestingOperation setDelegate:self];
 	
-	digitTestingOperation.digitTestingOperationCompletionBlock = ^(DigitSet testedDigitSet) {
+	digitTestingOperation.digitTestingOperationCompletionBlock = ^(DigitSet & testedDigitSet) {
 		NSLog(@"finished testing");
 		
 		mTestingDigitSet = testedDigitSet;
 		
 		[self didFinishUpdatingProgressView];
 		
-		[self statistics];
+		[self weightStatistics];
 		[self.collectionView reloadData];
 	};
 	
@@ -257,9 +257,75 @@
 	return [images copy];
 }
 
+- (void)weightStatistics {
+	// set success rates, confusion matrix, and overall success rate
+	int successCounts[NUMBER_OF_DIGIT_CLASSES];
+	int confusionMatrixCount[NUMBER_OF_DIGIT_CLASSES][NUMBER_OF_DIGIT_CLASSES];
+	
+	for (int classIndexR = 0; classIndexR < NUMBER_OF_DIGIT_CLASSES; classIndexR++) {
+		int successCount = 0;
+		int confusionCount = 0;
+		
+		successCounts[classIndexR] = successCount;
+		
+		for (int classIndexC = 0; classIndexC < NUMBER_OF_DIGIT_CLASSES; classIndexC++) {
+			confusionMatrixCount[classIndexR][classIndexC] = confusionCount;
+		}
+	}
+	
+	int digitIndex = 0;
+	
+	for (auto it : mTestingDigitSet.digits) {
+		int classifiedDigitClass = it.digitClass();
+		int correctDigitClass = mTestingDigitSet.digitLabels[digitIndex];
+		
+		// set classification type
+		if (classifiedDigitClass == correctDigitClass) {
+			mTestingDigitSet.digits[digitIndex].setClassificationType(ClassificationTypeCorrect);
+			successCounts[classifiedDigitClass]++;
+		}
+		
+		else {
+			mTestingDigitSet.digits[digitIndex].setClassificationType(ClassificationTypeIncorrect);
+		}
+		
+		// percentage of images in class r that are classified as class c
+		confusionMatrixCount[correctDigitClass][classifiedDigitClass]++;
+		
+		digitIndex++;
+	}
+	
+	int totalNumberOfInstances = 0;
+	int overallSuccessCount = 0;
+	
+	for (int classIndexR = 0; classIndexR < NUMBER_OF_DIGIT_CLASSES; classIndexR++) {
+		int totalNumberOfInstancesFromClass = mTestingDigitSet.frequencyMap[classIndexR];
+		
+		totalNumberOfInstances += totalNumberOfInstancesFromClass;
+		overallSuccessCount += successCounts[classIndexR];
+		
+		double successRate = (double)successCounts[classIndexR]/(double)totalNumberOfInstancesFromClass;
+		
+		mDigitStatistics.setSuccessRateForClassIndex(classIndexR, successRate);
+		
+		for (int classIndexC = 0; classIndexC < NUMBER_OF_DIGIT_CLASSES; classIndexC++) {
+			double confusionRate = (double)confusionMatrixCount[classIndexR][classIndexC]/(double)totalNumberOfInstancesFromClass;
+			
+			mDigitStatistics.setConfusionRateForTestImagesFromClassRClassifiedAsClassC(classIndexR, classIndexC, confusionRate);
+		}
+	}
+	
+	double overallSuccessRate = (double)overallSuccessCount/(double)totalNumberOfInstances;
+	mDigitStatistics.setOverallSuccessRate(overallSuccessRate);
+	
+	mDigitStatistics.printSuccessRates();
+	mDigitStatistics.printConfusionMatrix();
+	mDigitStatistics.printOverallSuccessRate();
+}
+
 #pragma mark - Statistics
 
-- (void)statistics {
+- (void)bayesStatistics {
 	// set success rates, confusion matrix, and overall success rate
 	int successCounts[NUMBER_OF_DIGIT_CLASSES];
 	int confusionMatrixCount[NUMBER_OF_DIGIT_CLASSES][NUMBER_OF_DIGIT_CLASSES];

@@ -17,7 +17,7 @@
 }
 
 - (void)main {
-	[self test];
+	[self weightTesting];
 	
 	[self didFinishTesting];
 }
@@ -34,8 +34,40 @@
 	return self;
 }
 
-- (void)test {
-	NSLog(@"testing");
+- (void)weightTesting {
+	int digitIndex = 0;
+	
+	// go through all the digits and classify according to the weight decision rule
+	for (auto it : mTestDigitSet.digits) {
+		int classificationIndex = 0;
+		double maxDotProduct = -DBL_MAX;
+		
+		for (int digitClassIndex = 0; digitClassIndex < NUMBER_OF_DIGIT_CLASSES; digitClassIndex++) {
+			double dotProduct = 0;
+			
+			for (int row = 0; row < DIGIT_SIZE; row++) {
+				for (int col = 0; col < DIGIT_SIZE; col++) {
+					double featureWeight = it.featureWeight(row, col);
+					double weight = mTrainingDigitSet.weightForIndexRowAndCol(digitClassIndex, row, col);
+					
+					dotProduct += featureWeight*weight;
+				}
+			}
+			
+			if (dotProduct > maxDotProduct) {
+				maxDotProduct = dotProduct;
+				classificationIndex = digitClassIndex;
+			}
+		}
+		
+		mTestDigitSet.digits[digitIndex].setDigitClass(classificationIndex);
+		
+		digitIndex++;
+	}
+}
+
+- (void)bayesTesting {
+	NSLog(@"weight testing");
 	
 	if ([self.delegate respondsToSelector:@selector(showProgressView)]) {
 		dispatch_async(dispatch_get_main_queue(), ^{
